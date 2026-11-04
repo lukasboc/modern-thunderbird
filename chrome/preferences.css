@@ -1,0 +1,53 @@
+/* Settings (about:preferences): sidebar like the folder pane, grouped cards like System Settings. */
+@-moz-document url-prefix("about:preferences") {
+
+  :root {
+    --layout-background-0: var(--mx-bg-toolbar) !important;
+    --layout-background-1: var(--mx-bg-window) !important;
+    --layout-color-1: var(--mx-label) !important;
+    --layout-color-2: var(--mx-label-secondary) !important;
+    font-family: var(--mx-font-family) !important;
+    background-color: var(--mx-bg-toolbar) !important;
+    color: var(--mx-label) !important;
+  }
+
+  #categories {
+    background-color: var(--mx-bg-sidebar-opaque) !important;
+    border-inline-end: var(--mx-hairline) solid var(--mx-separator) !important;
+    padding-inline: var(--mx-space-2) !important;
+  }
+
+  #categories > richlistitem {
+    min-block-size: var(--mx-folder-row) !important;
+    border: none !important;
+    border-radius: var(--mx-radius-sm) !important;
+    background-color: var(--mx-transparent) !important;
+    color: var(--mx-label) !important;
+
+    &:hover {
+      background-color: var(--mx-selection-sidebar) !important;
+    }
+
+    &[selected="true"] {
+      background-color: var(--mx-selection-sidebar) !important;
+      color: var(--mx-label) !important;
+    }
+  }
+
+  #paneDeck :is(fieldset, groupbox) {
+    background-color: var(--mx-bg-window) !important;
+    border: var(--mx-hairline) solid var(--mx-separator) !important;
+    border-radius: var(--mx-radius-lg) !important;
+    padding: var(--mx-space-4) !important;
+    margin-block: var(--mx-space-3) !important;
+    box-shadow: none !important;
+  }
+
+  #paneDeck :is(h1, h2, legend) {
+    color: var(--mx-label) !important;
+  }
+
+  #paneDeck :is(.subcategory, .header-name) {
+    font-weight: var(--mx-font-headline-weight) !important;
+  }
+}

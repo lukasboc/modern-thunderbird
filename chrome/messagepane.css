@@ -1,0 +1,135 @@
+/* about:message – header, avatar, attachments. Selectors: docs/selectors.md. Values: tokens.css only. */
+@-moz-document url("about:message") {
+
+  :root,
+  #messageHeader {
+    --recipient-avatar-size: var(--mx-avatar) !important;
+    --recipient-avatar-background-color: var(--mx-capsule) !important;
+    --recipient-avatar-color: var(--mx-label-secondary) !important;
+    --layout-background-0: var(--mx-bg-window) !important;
+    --layout-background-1: var(--mx-bg-window) !important;
+    --layout-color-1: var(--mx-label) !important;
+    --layout-color-2: var(--mx-label-secondary) !important;
+    font-family: var(--mx-font-family) !important;
+  }
+
+  :root,
+  body {
+    background-color: var(--mx-bg-window) !important;
+    color: var(--mx-label) !important;
+  }
+
+  /* Header without a box: flat, hairline below */
+  #messageHeader {
+    background-color: var(--mx-bg-window) !important;
+    border: none !important;
+    border-block-end: var(--mx-hairline) solid var(--mx-separator) !important;
+    box-shadow: none !important;
+    padding: var(--mx-space-4) var(--mx-space-5) !important;
+    row-gap: var(--mx-space-1) !important;
+  }
+
+  /* Subject 22/700 above the sender */
+  #headerSubjectSecurityContainer {
+    order: -1 !important;
+    margin-block-end: var(--mx-space-2) !important;
+  }
+
+  #expandedsubjectBox,
+  #expandedsubjectBox .header-row-value,
+  #expandedsubjectBox * {
+    font-size: var(--mx-font-title-size) !important;
+    font-weight: var(--mx-font-title-weight) !important;
+    color: var(--mx-label) !important;
+  }
+
+  /* Avatar: 40 px circle */
+  .recipient-avatar {
+    inline-size: var(--mx-avatar) !important;
+    block-size: var(--mx-avatar) !important;
+    border-radius: var(--mx-radius-round) !important;
+  }
+
+  /* Sender 13/600, To/Cc secondary, date right */
+  #expandedfromRow,
+  #expandedfromRow * {
+    font-size: var(--mx-font-headline-size) !important;
+    font-weight: var(--mx-font-headline-weight) !important;
+  }
+
+  #expandedtoRow,
+  #expandedccRow,
+  #expandedbccRow,
+  #expandedreply-toRow {
+    font-size: var(--mx-font-caption-size) !important;
+    color: var(--mx-label-secondary) !important;
+  }
+
+  #dateLabel {
+    margin-inline-start: auto !important;
+    font-size: var(--mx-font-caption-size) !important;
+    color: var(--mx-label-secondary) !important;
+  }
+
+  /* Header actions stay available (plan deviation 3), but icon-only and flat */
+  .message-header-view-button {
+    border: none !important;
+    border-radius: var(--mx-radius-sm) !important;
+    background-color: var(--mx-transparent) !important;
+    color: var(--mx-label-secondary) !important;
+    box-shadow: none !important;
+
+    &:hover {
+      background-color: var(--mx-selection-sidebar) !important;
+      color: var(--mx-label) !important;
+    }
+
+    &:hover:active {
+      background-color: var(--mx-pressed) !important;
+    }
+  }
+
+  /* Icon-only for the header action buttons; iMIP (invitation) buttons have no icons and keep labels */
+  #headerSenderToolbarContainer .message-header-view-button .toolbarbutton-text {
+    display: none !important;
+  }
+
+  /* Attachments: tiles */
+  #attachmentView,
+  #attachmentBar {
+    background-color: var(--mx-bg-window) !important;
+    border: none !important;
+    border-block-start: var(--mx-hairline) solid var(--mx-separator) !important;
+  }
+
+  #attachmentList {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: var(--mx-space-2) !important;
+    padding: var(--mx-space-3) var(--mx-space-5) !important;
+    background-color: var(--mx-transparent) !important;
+    border: none !important;
+  }
+
+  #attachmentList richlistitem {
+    border: var(--mx-hairline) solid var(--mx-separator) !important;
+    border-radius: var(--mx-radius-md) !important;
+    background-color: var(--mx-transparent) !important;
+    padding: var(--mx-space-2) var(--mx-space-3) !important;
+    color: var(--mx-label) !important;
+
+    &:hover {
+      background-color: var(--mx-selection-sidebar) !important;
+    }
+
+    &[selected="true"] {
+      background-color: var(--mx-accent-tint) !important;
+      border-color: var(--mx-accent-icon) !important;
+      color: var(--mx-label) !important;
+    }
+  }
+
+  #messagepane {
+    background-color: var(--mx-bg-window) !important;
+  }
+}

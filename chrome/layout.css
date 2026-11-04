@@ -1,0 +1,197 @@
+/* Main window: title bar, toolbar, tabs, spaces, panels, notifications, states.
+ * Selectors: docs/selectors.md. Values: tokens.css only. */
+@-moz-document url("chrome://messenger/content/messenger.xhtml") {
+
+  /* Map Thunderbird's own variables onto tokens */
+  :root {
+    --layout-background-0: var(--mx-bg-window) !important;
+    --layout-background-1: var(--mx-bg-window) !important;
+    --layout-background-2: var(--mx-bg-sidebar-opaque) !important;
+    --layout-color-0: var(--mx-label) !important;
+    --layout-color-1: var(--mx-label) !important;
+    --layout-color-2: var(--mx-label-secondary) !important;
+    --layout-color-3: var(--mx-label-tertiary) !important;
+    --layout-border-0: var(--mx-separator) !important;
+    --layout-border-1: var(--mx-separator) !important;
+
+    --toolbar-background-color: var(--mx-bg-toolbar) !important;
+    --toolbar-text-color: var(--mx-label) !important;
+    --toolbar-field-background-color: var(--mx-selection-sidebar) !important;
+    --toolbar-field-color: var(--mx-label) !important;
+    --toolbar-field-border-color: var(--mx-transparent) !important;
+    --toolbar-button-hover-background-color: var(--mx-selection-sidebar) !important;
+    --toolbar-button-hover-border-color: var(--mx-transparent) !important;
+    --toolbar-button-active-background-color: var(--mx-pressed) !important;
+    --toolbar-button-active-border-color: var(--mx-transparent) !important;
+    --toolbarbutton-icon-fill: var(--mx-label-secondary) !important;
+
+    --selected-item-color: var(--mx-accent-selection) !important;
+    --selected-item-text-color: var(--mx-on-accent) !important;
+
+    --tabs-toolbar-background-color: var(--mx-bg-toolbar) !important;
+    --tabs-toolbar-box-shadow: none !important;
+
+
+    font-family: var(--mx-font-family) !important;
+  }
+
+  /* Title bar + unified toolbar: one calm row */
+  #titlebar,
+  #unifiedToolbarContainer,
+  #unifiedToolbar {
+    background-color: var(--mx-bg-toolbar) !important;
+    border-block-end: var(--mx-hairline) solid var(--mx-separator) !important;
+    box-shadow: none !important;
+  }
+
+  #unifiedToolbarContent {
+    min-block-size: var(--mx-toolbar-height) !important;
+    gap: var(--mx-space-1) !important;
+  }
+
+  #unifiedToolbarContent .unified-toolbar-button {
+    border: none !important;
+    border-radius: var(--mx-radius-sm) !important;
+    background-color: var(--mx-transparent) !important;
+    color: var(--mx-label-secondary) !important;
+    transition: background-color var(--mx-duration) var(--mx-ease) !important;
+
+    &:hover {
+      background-color: var(--mx-selection-sidebar) !important;
+      color: var(--mx-label) !important;
+    }
+
+    &:hover:active,
+    &[aria-pressed="true"] {
+      background-color: var(--mx-pressed) !important;
+      color: var(--mx-label) !important;
+    }
+
+    & .button-icon {
+      inline-size: var(--mx-icon-md) !important;
+      block-size: var(--mx-icon-md) !important;
+      -moz-context-properties: fill, stroke !important;
+      fill: var(--mx-transparent) !important;
+      stroke: currentColor !important;
+    }
+  }
+
+  /* Toolbar icons from the theme's set (only where a TB button class exists) */
+  #unifiedToolbarContent {
+    & .write-message .button-icon { content: url("icons/compose.svg") !important; }
+    & .reply .button-icon { content: url("icons/reply.svg") !important; }
+    & .reply-all .button-icon { content: url("icons/reply-all.svg") !important; }
+    & .forward-inline .button-icon,
+    & .forward-attachment .button-icon { content: url("icons/forward.svg") !important; }
+    & .delete .button-icon { content: url("icons/delete.svg") !important; }
+    & .archive .button-icon { content: url("icons/archive.svg") !important; }
+    & .junk .button-icon { content: url("icons/junk.svg") !important; }
+    & .search-button-icon { content: url("icons/search.svg") !important; }
+  }
+
+  /* Search field: rounded, filled, right */
+  #unifiedToolbarContent global-search-bar,
+  #unifiedToolbarContent .search-bar {
+    --unified-toolbar-searchbar-height: var(--mx-search-height) !important;
+    border-radius: var(--mx-radius-sm) !important;
+  }
+
+  /* Tabs: flat, no frames; only shown from two tabs (mail.tabs.autoHide) */
+  #tabs-toolbar {
+    background-color: var(--mx-bg-toolbar) !important;
+    border: none !important;
+  }
+
+  #tabmail-tabs .tabmail-tab {
+    border: none !important;
+    border-radius: var(--mx-radius-sm) !important;
+    margin-block: var(--mx-space-1) !important;
+    color: var(--mx-label-secondary) !important;
+    background-color: var(--mx-transparent) !important;
+    box-shadow: none !important;
+
+    &:hover {
+      background-color: var(--mx-selection-sidebar) !important;
+    }
+
+    &[selected="true"] {
+      background-color: var(--mx-bg-window) !important;
+      color: var(--mx-label) !important;
+    }
+
+    & .tab-line,
+    & .tab-background {
+      background: none !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  /* Spaces toolbar: narrow, icons only, flat */
+  #spacesToolbar {
+    --spaces-bg-color: var(--mx-bg-sidebar-opaque) !important;
+    --spaces-button-text-color: var(--mx-label-secondary) !important;
+    --spaces-button-active-bg-color: var(--mx-selection-sidebar) !important;
+    --spaces-button-active-text-color: var(--mx-label) !important;
+    --spaces-icon-size: var(--mx-icon-md) !important;
+    background-color: var(--mx-bg-sidebar-opaque) !important;
+    border-inline-end: var(--mx-hairline) solid var(--mx-separator) !important;
+    --spaces-total-width: var(--mx-spaces-width) !important;
+  }
+
+  #spacesToolbar .spaces-toolbar-button {
+    border: none !important;
+    border-radius: var(--mx-radius-sm) !important;
+    background-color: var(--mx-transparent) !important;
+
+    &:hover {
+      background-color: var(--mx-selection-sidebar) !important;
+    }
+
+    &.current {
+      background-color: var(--mx-selection-sidebar) !important;
+      color: var(--mx-label) !important;
+    }
+  }
+
+  /* Own panels: rounded, soft shadow, hairline border. Native menus stay native. */
+  panel {
+    --panel-border-radius: var(--mx-radius-md) !important;
+    --panel-box-shadow: var(--mx-shadow-popup) !important;
+    --panel-border-color: var(--mx-separator) !important;
+    --panel-background: var(--mx-bg-window) !important;
+    --panel-text-color: var(--mx-label) !important;
+    --panel-separator-color: var(--mx-separator) !important;
+    --panel-list-border-radius: var(--mx-radius-md) !important;
+    --panel-list-box-shadow: var(--mx-shadow-popup) !important;
+    --panel-list-border-color: var(--mx-separator) !important;
+  }
+
+  /* Notification bars: capsule, accent tint, no yellow */
+  notification-message {
+    margin: var(--mx-space-2) !important;
+    border: none !important;
+    border-radius: var(--mx-radius-md) !important;
+    background-color: var(--mx-accent-tint) !important;
+    color: var(--mx-label) !important;
+    box-shadow: none !important;
+  }
+
+  /* Keyboard focus only */
+  :focus-visible {
+    outline: var(--mx-focus-width) solid var(--mx-focus-ring) !important;
+    outline-offset: var(--mx-space-0) !important;
+  }
+
+  /* Inactive window */
+  :root:-moz-window-inactive {
+    --selected-item-color: var(--mx-selection-inactive) !important;
+    --selected-item-text-color: var(--mx-label) !important;
+  }
+
+  /* Disabled */
+  :disabled,
+  [disabled="true"] {
+    color: var(--mx-label-tertiary) !important;
+  }
+}

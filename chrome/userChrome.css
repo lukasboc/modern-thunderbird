@@ -1,0 +1,7 @@
+/* Modern Thunderbird theme – chrome entry point. Imports only. */
+@import url("tokens.css");
+@import url("layout.css");
+@import url("folderpane.css");
+@import url("threadpane.css");
+@import url("messagepane.css");
+@import url("compose.css");

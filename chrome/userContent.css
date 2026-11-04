@@ -1,0 +1,5 @@
+/* Modern Thunderbird theme – content entry point. Imports only.
+ * about:preferences is a content-type browser, so its styles live here. */
+@import url("tokens.css");
+@import url("content.css");
+@import url("preferences.css");
