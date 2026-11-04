@@ -1,6 +1,6 @@
 import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, writeFileSync, readFileSync, mkdirSync, lstatSync, readlinkSync, existsSync, rmSync, readdirSync, chmodSync, statSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, readFileSync, mkdirSync, lstatSync, readlinkSync, existsSync, rmSync, readdirSync, chmodSync, statSync, symlinkSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
@@ -18,12 +18,38 @@ beforeEach(() => {
 });
 afterEach(() => rmSync(profile, { recursive: true, force: true }));
 
-test('install creates chrome symlink to repo chrome/', () => {
+// Content processes are sandboxed to the profile: a chrome/ symlink pointing into the repo makes
+// userContent.css fail to load (NS_ERROR_FILE_ACCESS_DENIED). So chrome/ is copied, with a marker.
+test('install copies chrome/ into the profile with a marker (no symlink)', () => {
   const r = run('install.sh', profile);
   assert.equal(r.status, 0, r.stderr);
-  const link = join(profile, 'chrome');
-  assert.ok(lstatSync(link).isSymbolicLink());
-  assert.equal(readlinkSync(link), join(repo, 'chrome'));
+  const dir = join(profile, 'chrome');
+  assert.ok(!lstatSync(dir).isSymbolicLink());
+  assert.ok(existsSync(join(dir, '.mx-theme')));
+  for (const f of ['userChrome.css', 'userContent.css', 'tokens.css', 'icons/dot.svg']) {
+    assert.equal(readFileSync(join(dir, f), 'utf8'), readFileSync(join(repo, 'chrome', f), 'utf8'), f);
+  }
+});
+
+test('re-running install refreshes the copied chrome/', () => {
+  run('install.sh', profile);
+  // Never write through a symlink: that would overwrite the repo's own chrome/.
+  assert.ok(!lstatSync(join(profile, 'chrome')).isSymbolicLink(), 'chrome/ must be a copy before writing into it');
+  writeFileSync(join(profile, 'chrome', 'tokens.css'), 'stale');
+  writeFileSync(join(profile, 'chrome', 'leftover.css'), 'x');
+  const r = run('install.sh', profile);
+  assert.equal(r.status, 0, r.stderr);
+  assert.equal(readFileSync(join(profile, 'chrome', 'tokens.css'), 'utf8'), readFileSync(join(repo, 'chrome', 'tokens.css'), 'utf8'));
+  assert.ok(!existsSync(join(profile, 'chrome', 'leftover.css')));
+  assert.ok(existsSync(join(profile, 'chrome', '.mx-theme')));
+});
+
+test('install replaces an old symlink to this repo with a copy', () => {
+  symlinkSync(join(repo, 'chrome'), join(profile, 'chrome'));
+  const r = run('install.sh', profile);
+  assert.equal(r.status, 0, r.stderr);
+  assert.ok(!lstatSync(join(profile, 'chrome')).isSymbolicLink());
+  assert.ok(existsSync(join(profile, 'chrome', '.mx-theme')));
 });
 
 test('install appends marked block and keeps existing lines', () => {
@@ -44,7 +70,7 @@ test('install twice is idempotent', () => {
   assert.equal(text.split('// >>> mx-theme').length - 1, 1);
 });
 
-test('install refuses when profile chrome/ exists and is not our symlink', () => {
+test('install refuses when profile chrome/ exists and is not ours', () => {
   mkdirSync(join(profile, 'chrome'));
   writeFileSync(join(profile, 'chrome', 'mine.css'), 'x');
   const r = run('install.sh', profile);
@@ -53,7 +79,7 @@ test('install refuses when profile chrome/ exists and is not our symlink', () =>
   assert.equal(readFileSync(join(profile, 'user.js'), 'utf8'), ORIGINAL);
 });
 
-test('uninstall restores user.js byte-identical and removes symlink', () => {
+test('uninstall restores user.js byte-identical and removes the copied chrome/', () => {
   run('install.sh', profile);
   const r = run('uninstall.sh', profile);
   assert.equal(r.status, 0, r.stderr);
@@ -152,4 +178,11 @@ test('re-running install on an installed profile adds new one-time defaults', ()
   const r = run('install.sh', profile);
   assert.equal(r.status, 0, r.stderr);
   assert.match(readFileSync(join(profile, 'prefs.js'), 'utf8'), /mail\.uifontsize", 14/);
+});
+
+test('uninstall leaves a foreign chrome/ folder alone', () => {
+  run('install.sh', profile);
+  rmSync(join(profile, 'chrome', '.mx-theme'));
+  run('uninstall.sh', profile);
+  assert.ok(existsSync(join(profile, 'chrome', 'userChrome.css')));
 });

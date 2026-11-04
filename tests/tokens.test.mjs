@@ -39,8 +39,8 @@ test('design unit derives from a 13px root', () => {
   assert.equal(light.get('--mx-unit'), 'calc(1rem / 13)');
 });
 
-test('message content and composer editor (16px root) pin the unit to 1px', () => {
-  assert.match(css, /@-moz-document url-prefix\("imap:"\), url-prefix\("mailbox:"\), url-prefix\("news:"\), url-prefix\("snews:"\), url-prefix\("about:blank\?compose"\)\s*\{\s*:root\s*\{\s*--mx-unit:\s*1px;/);
+test('message content, composer editor and search results pin the unit to 1px', () => {
+  assert.match(css, /@-moz-document url-prefix\("imap:"\), url-prefix\("mailbox:"\), url-prefix\("news:"\), url-prefix\("snews:"\), url-prefix\("about:blank\?compose"\), url\("chrome:\/\/messenger\/content\/glodaFacetView\.xhtml"\)\s*\{\s*:root\s*\{\s*--mx-unit:\s*1px;/);
 });
 
 test('font tokens use spec pixel sizes', () => {
@@ -69,7 +69,6 @@ test('measurement tokens', () => {
     '--mx-icon-sm': u(16), '--mx-icon-md': u(18), '--mx-avatar': u(40),
     '--mx-unread-dot': u(10), '--mx-message-max': u(720),
     '--mx-card-pad-y': u(10), '--mx-card-pad-x': u(16), '--mx-card-inset': u(6),
-    '--mx-spaces-width': u(44),
   };
   for (const [k, v] of Object.entries(expected)) assert.equal(light.get(k), v, k);
 });

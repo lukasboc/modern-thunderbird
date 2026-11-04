@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+  "name": "Modern Thunderbird – Quick Delete",
+  "description": "Adds a delete button to each card in the message list (next to the star). Styled by the Modern Thunderbird chrome/ stylesheets.",
+  "version": "1.0.0",
+  "browser_specific_settings": {
+    "gecko": { "id": "modern-thunderbird-actions@local", "strict_min_version": "128.0" }
+  },
+  "permissions": ["messagesRead", "messagesDelete"],
+  "background": { "scripts": ["background.js"] },
+  "experiment_apis": {
+    "cardDelete": {
+      "schema": "experiments/cardDelete/schema.json",
+      "parent": {
+        "scopes": ["addon_parent"],
+        "paths": [["cardDelete"]],
+        "script": "experiments/cardDelete/implementation.js",
+        "events": ["startup"]
+      }
+    }
+  }
+}

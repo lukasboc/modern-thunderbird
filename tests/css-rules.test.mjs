@@ -111,3 +111,44 @@ test('unread dot is vertically centred on the sender line', () => {
 test('8px gap between unread dot column and text column', () => {
   assert.match(read('threadpane.css'), /& \.card-layout > td > \.card-container\s*\{[^}]*column-gap:\s*var\(--mx-space-2\) !important/);
 });
+
+// Global search results (glodaFacetView.xhtml): cards like the message list instead of grey boxes.
+test('search results are styled as cards in their own document', () => {
+  const css = read('search.css');
+  assert.match(css, /@-moz-document url\("chrome:\/\/messenger\/content\/glodaFacetView\.xhtml"\)/);
+  assert.match(css, /\.message\s*\{[^}]*border-radius:\s*var\(--mx-radius-md\) !important/);
+  assert.match(css, /\.message-author\s*\{[^}]*font-weight:\s*var\(--mx-font-headline-weight\) !important/);
+});
+
+test('search snippet uses the system font, two lines, secondary colour', () => {
+  const css = read('search.css');
+  assert.match(css, /\.message-body\s*\{[^}]*font-family:\s*var\(--mx-font-family\) !important[^}]*-webkit-line-clamp:\s*2 !important/);
+  assert.match(css, /\.message-body-fulltext-match\s*\{[^}]*background-color:\s*var\(--mx-accent-tint\) !important[^}]*color:\s*var\(--mx-label\) !important/);
+});
+
+test('search facets: pill toggles and bars in accent, selected text readable', () => {
+  const css = read('search.css');
+  assert.match(css, /\[checked\]:not\(\[disabled\]\) > \.facet-checkbox-bubble[^{]*\{[^}]*background-color:\s*var\(--mx-accent-selection\) !important[^}]*color:\s*var\(--mx-on-accent\) !important/);
+  assert.match(css, /\.bar\[selected\][^{]*\{[^}]*background-color:\s*var\(--mx-accent-selection\) !important/);
+  assert.match(css, /--barColor:\s*var\(--mx-accent-icon\) !important/);
+});
+
+// Quick-delete button injected by addon/: hidden until the card is hovered, red on hover.
+test('card delete button: trash icon, revealed on hover, danger on hover, white on selection', () => {
+  const css = read('threadpane.css');
+  assert.match(css, /& \.mx-card-delete\s*\{[^}]*background:[^;]*url\("icons\/delete\.svg"\)[^}]*opacity:\s*0 !important/);
+  assert.match(css, /\.card-layout:is\(:hover, :focus-within\) \.mx-card-delete\s*\{[^}]*opacity:\s*1 !important/);
+  assert.match(css, /\.mx-card-delete:hover\s*\{[^}]*stroke:\s*var\(--mx-danger-icon\) !important/);
+  assert.match(css, /\.card-layout\.selected > td > \.card-container \.mx-card-delete[^{]*\{[^}]*stroke:\s*var\(--mx-on-accent\) !important/);
+});
+
+// TB offsets #messengerBody by --spaces-total-width computed on :root from --spaces-icon-size.
+// Setting spaces variables only on #spacesToolbar left a gap (white strip) next to the toolbar.
+test('spaces toolbar variables live on :root and the total width is left to Thunderbird', () => {
+  const css = read('layout.css');
+  assert.doesNotMatch(css, /--spaces-total-width/);
+  const rootBlock = css.match(/:root\s*\{([^}]*)\}/)[1];
+  assert.match(rootBlock, /--spaces-icon-size:\s*var\(--mx-icon-md\) !important/);
+  const toolbarBlock = css.match(/#spacesToolbar\s*\{([^}]*)\}/)[1];
+  assert.doesNotMatch(toolbarBlock, /--spaces-/);
+});

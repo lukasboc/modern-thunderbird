@@ -1,0 +1,14 @@
+[
+  {
+    "namespace": "cardDelete",
+    "description": "Delete button on message-list cards.",
+    "events": [
+      {
+        "name": "onDeleteClicked",
+        "type": "function",
+        "description": "Fired when the delete button of a card is clicked. A collapsed thread reports all its messages.",
+        "parameters": [{ "name": "messageIds", "type": "array", "items": { "type": "integer" } }]
+      }
+    ]
+  }
+]

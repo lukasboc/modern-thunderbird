@@ -84,11 +84,11 @@
   --mx-card-pad-y: calc(10 * var(--mx-unit));
   --mx-card-pad-x: calc(16 * var(--mx-unit));
   --mx-card-inset: calc(6 * var(--mx-unit));
-  --mx-spaces-width: calc(44 * var(--mx-unit));
 }
 
-/* Message content and composer editor have a 16px root: pin the unit to 1px there. */
-@-moz-document url-prefix("imap:"), url-prefix("mailbox:"), url-prefix("news:"), url-prefix("snews:"), url-prefix("about:blank?compose") {
+/* Message content, composer editor and search results (not registered for the UI font size,
+ * root size uncertain) pin the unit to 1px. */
+@-moz-document url-prefix("imap:"), url-prefix("mailbox:"), url-prefix("news:"), url-prefix("snews:"), url-prefix("about:blank?compose"), url("chrome://messenger/content/glodaFacetView.xhtml") {
   :root {
     --mx-unit: 1px;
   }
