@@ -36,6 +36,12 @@ Zwei Teile:
 | `layout.css.prefers-reduced-transparency.enabled` | true | „Transparenz reduzieren“ erreicht CSS |
 | `svg.context-properties.content.enabled` | true | die eigenen Icons (`file:`-URLs) dürfen Akzent- und Textfarbe übernehmen; Nebenwirkung: auch Webinhalte dürfen SVG-Context-Paint nutzen |
 
+Einmalig gesetzt (`prefs/defaults.js`, nur wenn das Profil noch keinen Wert hat, danach frei änderbar):
+
+| Pref | Wert | Zweck |
+|---|---|---|
+| `mail.uifontsize` | 15 | UI-Schrift 15 px statt der macOS-Systemgröße 13 px; alle Theme-Größen und Thunderbirds Kartenhöhen wachsen mit. Ändern über ≡ › Schriftgröße. |
+
 Hinweis: Werte in `user.js` setzt Thunderbird bei jedem Start neu. Wer z. B. die Dichte in den Einstellungen ändert, muss sie in `prefs/user.js` ändern und neu installieren.
 
 ## Deinstallation

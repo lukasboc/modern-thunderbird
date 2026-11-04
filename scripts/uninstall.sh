@@ -23,7 +23,7 @@ prefs="$profile/prefs.js"
 patterns="$(mktemp)"
 filtered="$(mktemp)"
 trap 'rm -f "$patterns" "$filtered"' EXIT
-sed -n 's/^user_pref("\([^"]*\)".*/user_pref("\1",/p' "$repo/prefs/user.js" > "$patterns"
+sed -n 's/^user_pref("\([^"]*\)".*/user_pref("\1",/p' "$repo/prefs/user.js" "$repo/prefs/defaults.js" > "$patterns"
 status=0
 grep -v -F -f "$patterns" "$prefs" > "$filtered" || status=$?
 if (( status > 1 )); then
