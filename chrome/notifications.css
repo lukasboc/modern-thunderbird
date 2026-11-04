@@ -1,0 +1,44 @@
+/* Notification bars (remote content, junk, attachment reminder, errors …) in every chrome document.
+ * Thunderbird styles them inside a shadow root through variables on the host element
+ * (infobar.css: warnings light-dark(#fff160, #ffe900) with black text). The host variables are
+ * overridden here: calm raised cards, severity shown by the icon colour, not by a loud surface. */
+
+notification-message {
+  --message-bar-background-color: var(--mx-bg-sidebar-opaque) !important;
+  --message-bar-text-color: var(--mx-label) !important;
+  --message-bar-icon-color: var(--mx-label-secondary) !important;
+  --background-color-box-info: var(--mx-bg-sidebar-opaque) !important;
+
+  /* Buttons: flat grey surfaces like the toolbar */
+  --button-background-color: var(--mx-selection-sidebar) !important;
+  --button-background-color-hover: var(--mx-pressed) !important;
+  --button-background-color-active: var(--mx-pressed) !important;
+  --button-border-color: var(--mx-transparent) !important;
+  --button-border-color-hover: var(--mx-transparent) !important;
+  --button-border-color-active: var(--mx-transparent) !important;
+  --button-text-color: var(--mx-label) !important;
+  --button-text-color-hover: var(--mx-label) !important;
+  --button-text-color-active: var(--mx-label) !important;
+
+  margin: var(--mx-space-2) var(--mx-space-4) !important;
+  border: var(--mx-hairline) solid var(--mx-separator) !important;
+  border-radius: var(--mx-radius-md) !important;
+  box-shadow: none !important;
+  font-size: var(--mx-font-body-size) !important;
+}
+
+/* Privacy notice (blocked remote content): purely informative, neutral icon */
+notification-message[value="remoteContent"] {
+  --message-bar-icon-color: var(--mx-label-secondary) !important;
+}
+
+/* Other warnings: same calm card, amber icon */
+notification-message[type="warning"]:not([value="remoteContent"]) {
+  --message-bar-icon-color: var(--mx-flag-icon) !important;
+}
+
+/* Errors: faint red surface, red icon */
+notification-message:is([type="error"], [type="critical"]) {
+  --message-bar-background-color: var(--mx-danger-tint) !important;
+  --message-bar-icon-color: var(--mx-danger-icon) !important;
+}

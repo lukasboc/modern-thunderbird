@@ -83,6 +83,9 @@ test('derived accent tokens are color-mix expressions', () => {
   assert.equal(light.get('--mx-accent-tint'), 'color-mix(in srgb, var(--mx-accent) 12%, transparent)');
   assert.equal(light.get('--mx-focus-ring'), 'color-mix(in srgb, var(--mx-accent) 50%, transparent)');
   assert.equal(light.get('--mx-on-accent'), '#FFFFFF');
+  assert.equal(light.get('--mx-danger-icon'), 'color-mix(in srgb, var(--mx-danger) 80%, black)');
+  assert.equal(dark.get('--mx-danger-icon'), 'var(--mx-danger)');
+  assert.equal(light.get('--mx-danger-tint'), 'color-mix(in srgb, var(--mx-danger) 10%, var(--mx-bg-sidebar-opaque))');
   assert.equal(light.get('--mx-flag-icon'), 'color-mix(in srgb, var(--mx-flag) 80%, black)');
   assert.equal(dark.get('--mx-flag-icon'), 'var(--mx-flag)');
   assert.ok(light.has('--mx-capsule') && dark.has('--mx-capsule'), 'capsule light+dark');

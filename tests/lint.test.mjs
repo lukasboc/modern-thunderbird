@@ -4,7 +4,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 
 const dir = new URL('../chrome/', import.meta.url);
 const read = f => readFileSync(new URL(f, dir), 'utf8');
-const AREA = ['layout', 'folderpane', 'threadpane', 'messagepane', 'compose'];
+const AREA = ['layout', 'folderpane', 'threadpane', 'messagepane', 'compose', 'notifications'];
 
 const FORBIDDEN = [
   [/#[0-9a-fA-F]{3,8}\b/, 'hex colour'],

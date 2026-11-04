@@ -69,3 +69,22 @@ test('unread cards use the theme dot at --mx-unread-dot size', () => {
   assert.match(css, /--read-status-icon:\s*url\("icons\/dot\.svg"\)/);
   assert.match(css, /--read-status-size:\s*var\(--mx-unread-dot\)/);
 });
+
+// TB 159 infobar.css paints warnings light-dark(#fff160, #ffe900) with black text – glaring in dark mode.
+test('notifications are calm cards in every chrome document', () => {
+  const css = read('notifications.css');
+  assert.doesNotMatch(css, /@-moz-document/);
+  assert.match(css, /notification-message\s*\{[^}]*--message-bar-background-color:\s*var\(--mx-bg-sidebar-opaque\) !important/);
+  assert.match(css, /notification-message\s*\{[^}]*--message-bar-text-color:\s*var\(--mx-label\) !important/);
+});
+
+test('privacy notice is neutral, warnings amber icon, errors red', () => {
+  const css = read('notifications.css');
+  assert.match(css, /notification-message\[value="remoteContent"\]\s*\{[^}]*--message-bar-icon-color:\s*var\(--mx-label-secondary\) !important/);
+  assert.match(css, /notification-message\[type="warning"\]:not\(\[value="remoteContent"\]\)\s*\{[^}]*--message-bar-icon-color:\s*var\(--mx-flag-icon\) !important/);
+  assert.match(css, /notification-message:is\(\[type="error"\], \[type="critical"\]\)\s*\{[^}]*--message-bar-background-color:\s*var\(--mx-danger-tint\) !important[^}]*--message-bar-icon-color:\s*var\(--mx-danger-icon\) !important/);
+});
+
+test('layout.css no longer styles notifications itself', () => {
+  assert.doesNotMatch(read('layout.css'), /notification-message/);
+});

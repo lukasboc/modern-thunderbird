@@ -31,6 +31,8 @@
   --mx-flag: #FF9500;
   --mx-flag-icon: color-mix(in srgb, var(--mx-flag) 80%, black);
   --mx-danger: #FF3B30;
+  --mx-danger-icon: color-mix(in srgb, var(--mx-danger) 80%, black);
+  --mx-danger-tint: color-mix(in srgb, var(--mx-danger) 10%, var(--mx-bg-sidebar-opaque));
   --mx-capsule: rgba(120,120,128,0.16);
   --mx-transparent: transparent;
 
@@ -112,6 +114,7 @@
     --mx-flag: #FF9F0A;
     --mx-flag-icon: var(--mx-flag);
     --mx-danger: #FF453A;
+    --mx-danger-icon: var(--mx-danger);
     --mx-capsule: rgba(120,120,128,0.32);
   }
 }
