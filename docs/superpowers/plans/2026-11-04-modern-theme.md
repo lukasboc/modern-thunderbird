@@ -16,7 +16,7 @@
 - Kein Scope: Kalender, Aufgaben, Adressbuch (Phase 2), Windows/Linux, Funktionsänderungen, neue Features, Tastaturkürzel, Veröffentlichung auf ATN. Spätere Veröffentlichung auf GitHub ist möglich, deshalb gilt die Lizenzhygiene trotzdem.
 - Keine Icons oder Grafiken Dritter. Nur freie Icons (Lucide, Lizenz ISC, nicht MIT wie in der Spec steht) oder eigene.
 - Alle Farben, Schriftgrößen, Abstände, Radien, Dauern nur als `--mx-*`-Tokens aus `chrome/tokens.css`. In Bereichsdateien stehen keine Literale.
-- Schrift: `system-ui`, keine Webfonts. Größen in `rem`.
+- Schrift: `system-ui`, keine Webfonts. Größen skalieren mit der UI-Schriftgröße über `--mx-unit: calc(1rem / 13)` (Thunderbirds Wurzelschrift ist 13 px; die rem-Werte unten bei 16 px Basis sind überholt, siehe `tests/tokens.test.mjs`).
 - Raster 4/8/12/16/24 px. Radien sm 6 px, md 8 px, lg 10 px. Popup-Schatten `0 8px 24px rgba(0,0,0,0.18)`. Animation 150–200 ms ease-out, aus bei `prefers-reduced-motion`.
 - Höchstens 1 px Trennlinie, und nur in `--mx-separator`.
 - Kontrast: Text ≥ 4,5:1, Icons/Bedienelemente ≥ 3:1, jeweils in Light und Dark.

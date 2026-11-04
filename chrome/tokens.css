@@ -3,6 +3,10 @@
  * Area files use only var(--mx-*). Order matters: light → dark → a11y → system accent. */
 
 :root {
+  /* Design unit: Thunderbird's chrome root font is the macOS system size (13px).
+   * 1 unit = 1px at the default UI font size and scales with Settings › Font size. */
+  --mx-unit: calc(1rem / 13);
+
   /* Colours (light) */
   --mx-accent: #007AFF;
   /* Accent derivatives clamp OKLCH lightness so any macOS accent (yellow, graphite …) keeps
@@ -32,31 +36,31 @@
 
   /* Typography */
   --mx-font-family: system-ui, sans-serif;
-  --mx-font-title-size: 1.375rem;
+  --mx-font-title-size: calc(22 * var(--mx-unit));
   --mx-font-title-weight: 700;
-  --mx-font-headline-size: 0.8125rem;
+  --mx-font-headline-size: calc(13 * var(--mx-unit));
   --mx-font-headline-weight: 600;
-  --mx-font-body-size: 0.8125rem;
+  --mx-font-body-size: calc(13 * var(--mx-unit));
   --mx-font-body-weight: 400;
-  --mx-font-caption-size: 0.75rem;
+  --mx-font-caption-size: calc(12 * var(--mx-unit));
   --mx-font-caption-weight: 400;
-  --mx-font-section-size: 0.6875rem;
+  --mx-font-section-size: calc(11 * var(--mx-unit));
   --mx-font-section-weight: 600;
 
-  /* Spacing (4 / 8 / 12 / 16 / 24 px) */
+  /* Spacing (4 / 8 / 12 / 16 / 24 px), all sizes as spec px × unit */
   --mx-space-0: 0;
-  --mx-space-1: 0.25rem;
-  --mx-space-2: 0.5rem;
-  --mx-space-3: 0.75rem;
-  --mx-space-4: 1rem;
-  --mx-space-5: 1.5rem;
+  --mx-space-1: calc(4 * var(--mx-unit));
+  --mx-space-2: calc(8 * var(--mx-unit));
+  --mx-space-3: calc(12 * var(--mx-unit));
+  --mx-space-4: calc(16 * var(--mx-unit));
+  --mx-space-5: calc(24 * var(--mx-unit));
 
   /* Radii */
-  --mx-radius-sm: 0.375rem;
-  --mx-radius-md: 0.5rem;
-  --mx-radius-lg: 0.625rem;
+  --mx-radius-sm: calc(6 * var(--mx-unit));
+  --mx-radius-md: calc(8 * var(--mx-unit));
+  --mx-radius-lg: calc(10 * var(--mx-unit));
   --mx-radius-round: 50%;
-  --mx-radius-pill: 999rem;
+  --mx-radius-pill: 999px;
 
   /* Effects */
   --mx-shadow-popup: 0 8px 24px rgba(0,0,0,0.18);
@@ -66,18 +70,25 @@
   --mx-focus-width: 3px;
 
   /* Measurements */
-  --mx-toolbar-height: 3.25rem;
-  --mx-search-height: 1.75rem;
-  --mx-folder-row: 1.75rem;
-  --mx-icon-sm: 1rem;
-  --mx-icon-md: 1.125rem;
-  --mx-avatar: 2.5rem;
-  --mx-unread-dot: 0.5rem;
-  --mx-message-max: 45rem;
-  --mx-card-pad-y: 0.625rem;
-  --mx-card-pad-x: 1rem;
-  --mx-card-inset: 0.375rem;
-  --mx-spaces-width: 2.75rem;
+  --mx-toolbar-height: calc(52 * var(--mx-unit));
+  --mx-search-height: calc(28 * var(--mx-unit));
+  --mx-folder-row: calc(28 * var(--mx-unit));
+  --mx-icon-sm: calc(16 * var(--mx-unit));
+  --mx-icon-md: calc(18 * var(--mx-unit));
+  --mx-avatar: calc(40 * var(--mx-unit));
+  --mx-unread-dot: calc(8 * var(--mx-unit));
+  --mx-message-max: calc(720 * var(--mx-unit));
+  --mx-card-pad-y: calc(10 * var(--mx-unit));
+  --mx-card-pad-x: calc(16 * var(--mx-unit));
+  --mx-card-inset: calc(6 * var(--mx-unit));
+  --mx-spaces-width: calc(44 * var(--mx-unit));
+}
+
+/* Message content and composer editor have a 16px root: pin the unit to 1px there. */
+@-moz-document url-prefix("imap:"), url-prefix("mailbox:"), url-prefix("news:"), url-prefix("snews:"), url-prefix("about:blank?compose") {
+  :root {
+    --mx-unit: 1px;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

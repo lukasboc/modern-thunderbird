@@ -64,6 +64,7 @@ npm test   # Tokens, Kontrast, Literal- und !important-Lint, Variablen, Icons, M
 
 - Bereichsdateien (`layout`, `folderpane`, `threadpane`, `messagepane`, `compose`, `preferences`, `content`) verwenden nur `var(--mx-*)` und jede Deklaration mit `!important` – `userChrome.css` ist ein User-Stylesheet und verliert sonst gegen Thunderbirds eigene Styles.
 - Selektoren nur aus `docs/selectors.md`.
+- Größen sind Spec-Pixel × `--mx-unit` (`calc(1rem / 13)`): Thunderbirds Wurzelschrift ist die macOS-Systemgröße von 13 px. So entspricht ein Wert bei Standard-Schriftgröße genau einem Pixel und wächst mit Einstellungen › Schriftgröße mit.
 - `about:preferences` ist ein Content-Dokument: `preferences.css` wird aus `userContent.css` importiert, alles andere aus `userChrome.css`.
 
 ## Lizenz

@@ -31,16 +31,22 @@ test('every spec color token has exact light and dark value', () => {
   }
 });
 
-test('font tokens are rem at 16px base', () => {
-  const fonts = {
-    title: ['1.375rem', '700'],
-    headline: ['0.8125rem', '600'],
-    body: ['0.8125rem', '400'],
-    caption: ['0.75rem', '400'],
-    section: ['0.6875rem', '600'],
-  };
-  for (const [k, [size, weight]] of Object.entries(fonts)) {
-    assert.equal(light.get(`--mx-font-${k}-size`), size, k);
+// Thunderbird's chrome root font is the macOS system size (13px), not 16px.
+// One design unit = 1px at the default UI font size and scales with Settings › Font size.
+const u = px => `calc(${px} * var(--mx-unit))`;
+
+test('design unit derives from a 13px root', () => {
+  assert.equal(light.get('--mx-unit'), 'calc(1rem / 13)');
+});
+
+test('message content and composer editor (16px root) pin the unit to 1px', () => {
+  assert.match(css, /@-moz-document url-prefix\("imap:"\), url-prefix\("mailbox:"\), url-prefix\("news:"\), url-prefix\("snews:"\), url-prefix\("about:blank\?compose"\)\s*\{\s*:root\s*\{\s*--mx-unit:\s*1px;/);
+});
+
+test('font tokens use spec pixel sizes', () => {
+  const fonts = { title: [22, '700'], headline: [13, '600'], body: [13, '400'], caption: [12, '400'], section: [11, '600'] };
+  for (const [k, [px, weight]] of Object.entries(fonts)) {
+    assert.equal(light.get(`--mx-font-${k}-size`), u(px), k);
     assert.equal(light.get(`--mx-font-${k}-weight`), weight, k);
   }
   assert.equal(light.get('--mx-font-family'), 'system-ui, sans-serif');
@@ -48,9 +54,8 @@ test('font tokens are rem at 16px base', () => {
 
 test('spacing, radii and effects', () => {
   const expected = {
-    '--mx-space-1': '0.25rem', '--mx-space-2': '0.5rem', '--mx-space-3': '0.75rem',
-    '--mx-space-4': '1rem', '--mx-space-5': '1.5rem',
-    '--mx-radius-sm': '0.375rem', '--mx-radius-md': '0.5rem', '--mx-radius-lg': '0.625rem',
+    '--mx-space-1': u(4), '--mx-space-2': u(8), '--mx-space-3': u(12), '--mx-space-4': u(16), '--mx-space-5': u(24),
+    '--mx-radius-sm': u(6), '--mx-radius-md': u(8), '--mx-radius-lg': u(10),
     '--mx-shadow-popup': '0 8px 24px rgba(0,0,0,0.18)',
     '--mx-duration': '180ms', '--mx-ease': 'ease-out',
     '--mx-hairline': '1px', '--mx-focus-width': '3px',
@@ -60,12 +65,17 @@ test('spacing, radii and effects', () => {
 
 test('measurement tokens', () => {
   const expected = {
-    '--mx-toolbar-height': '3.25rem', '--mx-search-height': '1.75rem', '--mx-folder-row': '1.75rem',
-    '--mx-icon-sm': '1rem', '--mx-icon-md': '1.125rem', '--mx-avatar': '2.5rem',
-    '--mx-unread-dot': '0.5rem', '--mx-message-max': '45rem',
-    '--mx-card-pad-y': '0.625rem', '--mx-card-pad-x': '1rem', '--mx-card-inset': '0.375rem',
+    '--mx-toolbar-height': u(52), '--mx-search-height': u(28), '--mx-folder-row': u(28),
+    '--mx-icon-sm': u(16), '--mx-icon-md': u(18), '--mx-avatar': u(40),
+    '--mx-unread-dot': u(8), '--mx-message-max': u(720),
+    '--mx-card-pad-y': u(10), '--mx-card-pad-x': u(16), '--mx-card-inset': u(6),
+    '--mx-spaces-width': u(44),
   };
   for (const [k, v] of Object.entries(expected)) assert.equal(light.get(k), v, k);
+});
+
+test('no token besides the unit uses rem', () => {
+  for (const [k, v] of light) if (k !== '--mx-unit') assert.doesNotMatch(v, /rem\b/, k);
 });
 
 test('derived accent tokens are color-mix expressions', () => {
