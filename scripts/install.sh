@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Usage: scripts/install.sh <profile path>
-# Links chrome/ into the profile and appends the theme prefs to user.js (marked block).
+# Copies chrome/ into the profile and appends the theme prefs to user.js (marked block).
+# Re-run after changes in chrome/ to update the copy.
 set -euo pipefail
 
 repo="$(cd "$(dirname "$0")/.." && pwd)"
@@ -17,15 +18,23 @@ if pgrep -xq "${MX_TB_PROCESS:-thunderbird}"; then
   exit 1
 fi
 
-link="$profile/chrome"
-if [[ -e "$link" || -L "$link" ]]; then
-  if [[ ! -L "$link" || "$(readlink "$link")" != "$repo/chrome" ]]; then
-    echo "error: $link exists and is not this theme's symlink; move it away first" >&2
+# chrome/ is copied, not linked: Thunderbird's content processes are sandboxed to the profile
+# and cannot read userContent.css through a symlink into the repo.
+dest="$profile/chrome"
+marker="$dest/.mx-theme"
+if [[ -L "$dest" ]]; then
+  if [[ "$(readlink "$dest")" != "$repo/chrome" ]]; then
+    echo "error: $dest is a symlink not created by this theme; move it away first" >&2
     exit 1
   fi
-else
-  ln -s "$repo/chrome" "$link"
+  rm "$dest"   # old install (symlink to this repo) → replaced by a copy
+elif [[ -e "$dest" && ! -f "$marker" ]]; then
+  echo "error: $dest exists and is not this theme's copy; move it away first" >&2
+  exit 1
 fi
+mkdir -p "$dest"
+rsync -a --delete "$repo/chrome/" "$dest/"
+: > "$marker"
 
 # One-time defaults: only where prefs.js has no value yet (stays adjustable in Thunderbird).
 while IFS= read -r line; do

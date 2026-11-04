@@ -15,7 +15,7 @@ Zwei Teile:
    ```bash
    scripts/install.sh ~/Library/Thunderbird/Profiles/xxxx.default-release
    ```
-   Das legt `chrome/` als Symlink ins Profil und schreibt einen markierten Block in `user.js`. Ein vorhandener eigener `chrome/`-Ordner wird nicht angetastet; das Skript bricht dann ab.
+   Das **kopiert** `chrome/` ins Profil (Markierung `chrome/.mx-theme`) und schreibt einen markierten Block in `user.js`. Kein Symlink: Thunderbirds Content-Prozesse dürfen nur Dateien im Profil lesen, über einen Symlink ins Repo würde `userContent.css` nicht geladen. **Nach Änderungen in `chrome/` das Skript erneut ausführen**, es aktualisiert die Kopie. Ein fremder `chrome/`-Ordner (ohne Markierung) wird nicht angetastet; das Skript bricht dann ab. Ein alter Symlink dieses Themes wird durch die Kopie ersetzt.
 4. Theme bauen und installieren:
    ```bash
    scripts/build-theme.sh
@@ -61,7 +61,7 @@ Hinweis: Werte in `user.js` setzt Thunderbird bei jedem Start neu. Wer z. B. die
 ## Deinstallation
 
 1. Thunderbird beenden.
-2. `scripts/uninstall.sh <profilpfad>` – entfernt den Symlink, nur den markierten Block aus `user.js` und die Theme-Prefs aus `prefs.js` (Sicherung: `prefs.js.mx-bak`). Prefs, die du vorher selbst auf denselben Namen gesetzt hattest (z. B. eine eigene Dichte), stehen danach auf dem Thunderbird-Standard. Beide Skripte brechen ab, solange Thunderbird läuft.
+2. `scripts/uninstall.sh <profilpfad>` – entfernt die kopierte `chrome/` (nur mit Markierung), nur den markierten Block aus `user.js` und die Theme-Prefs aus `prefs.js` (Sicherung: `prefs.js.mx-bak`). Prefs, die du vorher selbst auf denselben Namen gesetzt hattest (z. B. eine eigene Dichte), stehen danach auf dem Thunderbird-Standard. Beide Skripte brechen ab, solange Thunderbird läuft.
 3. Theme in Add-ons und Themes deaktivieren oder entfernen.
 
 Notfall ohne Skript: `chrome/` im Profil umbenennen.

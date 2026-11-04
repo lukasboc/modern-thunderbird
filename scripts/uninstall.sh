@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Usage: scripts/uninstall.sh <profile path>
-# Reverts scripts/install.sh: removes the chrome/ symlink, the marked user.js block and
+# Reverts scripts/install.sh: removes the copied chrome/ (only with the .mx-theme marker), the marked user.js block and
 # the theme prefs Thunderbird copied into prefs.js. Other content is left untouched.
 set -euo pipefail
 
@@ -35,9 +35,11 @@ if ! cmp -s "$prefs" "$filtered"; then
   cat "$filtered" > "$prefs"   # keeps inode and mode (0600)
 fi
 
-link="$profile/chrome"
-if [[ -L "$link" && "$(readlink "$link")" == "$repo/chrome" ]]; then
-  rm "$link"
+dest="$profile/chrome"
+if [[ -L "$dest" && "$(readlink "$dest")" == "$repo/chrome" ]]; then
+  rm "$dest"                       # old symlink install
+elif [[ -d "$dest" && -f "$dest/.mx-theme" ]]; then
+  rm -rf "$dest"                   # our copy (marker present); a foreign chrome/ stays
 fi
 
 userjs="$profile/user.js"

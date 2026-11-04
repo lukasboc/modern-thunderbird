@@ -31,6 +31,12 @@
     --tabs-toolbar-background-color: var(--mx-bg-toolbar) !important;
     --tabs-toolbar-box-shadow: none !important;
 
+    --spaces-bg-color: var(--mx-bg-sidebar-opaque) !important;
+    --spaces-button-text-color: var(--mx-label-secondary) !important;
+    --spaces-button-active-bg-color: var(--mx-selection-sidebar) !important;
+    --spaces-button-active-text-color: var(--mx-label) !important;
+    --spaces-icon-size: var(--mx-icon-md) !important;
+
 
     font-family: var(--mx-font-family) !important;
   }
@@ -129,14 +135,8 @@
 
   /* Spaces toolbar: narrow, icons only, flat */
   #spacesToolbar {
-    --spaces-bg-color: var(--mx-bg-sidebar-opaque) !important;
-    --spaces-button-text-color: var(--mx-label-secondary) !important;
-    --spaces-button-active-bg-color: var(--mx-selection-sidebar) !important;
-    --spaces-button-active-text-color: var(--mx-label) !important;
-    --spaces-icon-size: var(--mx-icon-md) !important;
     background-color: var(--mx-bg-sidebar-opaque) !important;
     border-inline-end: var(--mx-hairline) solid var(--mx-separator) !important;
-    --spaces-total-width: var(--mx-spaces-width) !important;
   }
 
   #spacesToolbar .spaces-toolbar-button {

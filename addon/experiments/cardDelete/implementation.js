@@ -44,9 +44,17 @@ function headersForRow(view, index) {
 }
 
 var cardDelete = class extends ExtensionCommon.ExtensionAPI {
+  // getAPI() (background registering its listener) can run before onStartup(): keep shared
+  // state lazy so neither side resets the other.
+  get listeners() {
+    return (this._listeners ??= new Set());
+  }
+
+  get docs() {
+    return (this._docs ??= new Map()); // document -> cleanup function
+  }
+
   onStartup() {
-    this.listeners = new Set();
-    this.docs = new Map(); // document -> cleanup function
     this.observer = subject => {
       if (subject?.URL === "about:3pane") {
         subject.addEventListener("DOMContentLoaded", () => this.inject(subject), { once: true });

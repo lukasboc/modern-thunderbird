@@ -141,3 +141,14 @@ test('card delete button: trash icon, revealed on hover, danger on hover, white 
   assert.match(css, /\.mx-card-delete:hover\s*\{[^}]*stroke:\s*var\(--mx-danger-icon\) !important/);
   assert.match(css, /\.card-layout\.selected > td > \.card-container \.mx-card-delete[^{]*\{[^}]*stroke:\s*var\(--mx-on-accent\) !important/);
 });
+
+// TB offsets #messengerBody by --spaces-total-width computed on :root from --spaces-icon-size.
+// Setting spaces variables only on #spacesToolbar left a gap (white strip) next to the toolbar.
+test('spaces toolbar variables live on :root and the total width is left to Thunderbird', () => {
+  const css = read('layout.css');
+  assert.doesNotMatch(css, /--spaces-total-width/);
+  const rootBlock = css.match(/:root\s*\{([^}]*)\}/)[1];
+  assert.match(rootBlock, /--spaces-icon-size:\s*var\(--mx-icon-md\) !important/);
+  const toolbarBlock = css.match(/#spacesToolbar\s*\{([^}]*)\}/)[1];
+  assert.doesNotMatch(toolbarBlock, /--spaces-/);
+});

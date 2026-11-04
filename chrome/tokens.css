@@ -84,7 +84,6 @@
   --mx-card-pad-y: calc(10 * var(--mx-unit));
   --mx-card-pad-x: calc(16 * var(--mx-unit));
   --mx-card-inset: calc(6 * var(--mx-unit));
-  --mx-spaces-width: calc(44 * var(--mx-unit));
 }
 
 /* Message content, composer editor and search results (not registered for the UI font size,

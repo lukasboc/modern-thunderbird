@@ -69,7 +69,6 @@ test('measurement tokens', () => {
     '--mx-icon-sm': u(16), '--mx-icon-md': u(18), '--mx-avatar': u(40),
     '--mx-unread-dot': u(10), '--mx-message-max': u(720),
     '--mx-card-pad-y': u(10), '--mx-card-pad-x': u(16), '--mx-card-inset': u(6),
-    '--mx-spaces-width': u(44),
   };
   for (const [k, v] of Object.entries(expected)) assert.equal(light.get(k), v, k);
 });

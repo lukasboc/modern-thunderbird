@@ -48,10 +48,15 @@ function runBackground() {
   return { calls, fire: ids => listener(ids) };
 }
 
-test('background deletes the clicked messages via messages.delete (trash, undo)', async () => {
+// TB 159 rejects a plain boolean ("Specify the options object …"). isUserAction passes the mail
+// window to folder.deleteMessages and sets allowUndo, so ⌘Z restores the message.
+test('background deletes the clicked messages to trash as a user action (undo)', async () => {
   const bg = runBackground();
   await bg.fire([3, 7]);
-  assert.deepEqual(bg.calls, [[[3, 7], false]]);
+  assert.equal(bg.calls.length, 1);
+  const [ids, options] = bg.calls[0];
+  assert.deepEqual([...ids], [3, 7]);
+  assert.deepEqual({ ...options }, { isUserAction: true });
 });
 
 test('background ignores an empty id list', async () => {
@@ -140,4 +145,25 @@ test('build-addon.sh packs manifest and experiment at the xpi root', () => {
   for (const f of ['manifest.json', 'background.js', 'experiments/cardDelete/schema.json', 'experiments/cardDelete/implementation.js']) {
     assert.match(l, new RegExp(`\\s${f.replace(/[./]/g, '\\$&')}\\n`), f);
   }
+});
+
+// Background may register its listener (getAPI) before onStartup runs; onStartup must not
+// throw that listener away, and report() must reach it with the converted ids.
+test('listener registered before onStartup still receives deleted ids', () => {
+  let registered;
+  const sandbox = {
+    ChromeUtils: { importESModule: () => ({ ExtensionCommon: {
+      ExtensionAPI: class { constructor(extension) { this.extension = extension; } },
+      EventManager: class { constructor(opts) { registered = opts.register; } api() { return {}; } },
+    } }) },
+    Services: { obs: { addObserver() {}, removeObserver() {} }, wm: { getEnumerator: () => [] } },
+  };
+  vm.runInNewContext(readFileSync(addon(manifest.experiment_apis.cardDelete.parent.script), 'utf8') + '\nthis.API = cardDelete;', sandbox);
+  const api = new sandbox.API({ messageManager: { convert: h => ({ id: h.n }) } });
+  api.getAPI({});
+  const got = [];
+  registered({ async: ids => got.push([...ids]) });
+  api.onStartup();
+  api.report([{ n: 4 }, { n: 9 }]);
+  assert.deepEqual(got, [[4, 9]]);
 });
