@@ -59,6 +59,7 @@
       border: none !important;
       border-radius: var(--mx-radius-md) !important;
       padding-inline: var(--mx-card-pad-x) !important;
+      column-gap: var(--mx-space-2) !important;
       color: var(--mx-label) !important;
       box-shadow: none !important;
       transition: background-color var(--mx-duration) var(--mx-ease) !important;

@@ -106,3 +106,8 @@ test('unread dot is vertically centred on the sender line', () => {
   assert.match(css, /\[data-properties~="unread"\] \.read-status\s*\{[^}]*inline-size:\s*var\(--mx-unread-dot\) !important/);
   assert.match(css, /& \.thread-card-row\s*\{[^}]*line-height:\s*var\(--mx-line-height\) !important/);
 });
+
+// TB's card grid ("dot column | text column") has no column gap: the dot touched the sender.
+test('8px gap between unread dot column and text column', () => {
+  assert.match(read('threadpane.css'), /& \.card-layout > td > \.card-container\s*\{[^}]*column-gap:\s*var\(--mx-space-2\) !important/);
+});
