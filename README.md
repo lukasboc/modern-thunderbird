@@ -24,6 +24,20 @@ Zwei Teile:
 5. Einstellungen › Darstellung › Akzentfarbe auf „System“ lassen (setzt `user.js` bereits).
 6. Toolbar anpassen (Rechtsklick auf die Toolbar › Anpassen): Antworten, Allen antworten, Weiterleiten, Löschen hinzufügen. Die Buttons im Nachrichtenkopf bleiben als Icons erhalten, damit Nachrichten in eigenen Tabs und Fenstern bedienbar bleiben.
 
+7. Optional, Schnell-Löschen in der Nachrichtenliste:
+   ```bash
+   scripts/build-addon.sh
+   ```
+   Dann `dist/modern-thunderbird-actions.xpi` genauso wie das Theme installieren. Beim Überfahren einer Karte erscheint neben dem Stern ein Papierkorb; ein Klick löscht diese Mail (bei zugeklapptem Thread den ganzen Thread) nach den Papierkorb-Regeln des Kontos, ohne die Auswahl zu ändern. Rückgängig wie gewohnt.
+
+### Schnell-Löschen (`addon/`)
+
+Ein kleines Add-on mit **Experiment-API**, also privilegiertem JavaScript. Das geht über die ursprüngliche Spec hinaus, die keine neuen Funktionen vorsah; die Spec nennt es als optionale Stufe.
+
+- `experiments/cardDelete/implementation.js` fügt den Knopf in Thunderbirds Kartenvorlage (`#threadPaneCardTemplate`) ein und meldet Klicks; gelöscht wird in `background.js` über die stabile API `messages.delete`.
+- Die Optik kommt aus `chrome/threadpane.css` (`.mx-card-delete`); ohne die Stylesheets erscheint ein ungestylter Knopf.
+- Nach jedem Thunderbird-Major-Update mitprüfen (Checkliste D-01 bis D-05). Deinstallation über Add-ons und Themes.
+
 ### Gesetzte Prefs (`prefs/user.js`)
 
 | Pref | Wert | Zweck |

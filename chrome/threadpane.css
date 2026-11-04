@@ -141,6 +141,31 @@
       fill: var(--mx-accent-icon) !important;
     }
 
+    /* Quick-delete button (injected by addon/): next to the star, revealed on hover */
+    & .mx-card-delete {
+      inline-size: var(--mx-icon-md) !important;
+      block-size: var(--mx-icon-md) !important;
+      min-inline-size: var(--mx-icon-md) !important;
+      padding: var(--mx-space-0) !important;
+      border: none !important;
+      border-radius: var(--mx-radius-sm) !important;
+      background: url("icons/delete.svg") center / var(--mx-icon-sm) no-repeat var(--mx-transparent) !important;
+      -moz-context-properties: fill, stroke !important;
+      fill: var(--mx-transparent) !important;
+      stroke: var(--mx-label-secondary) !important;
+      opacity: 0 !important;
+      transition: opacity var(--mx-duration) var(--mx-ease) !important;
+    }
+
+    & .card-layout:is(:hover, :focus-within) .mx-card-delete {
+      opacity: 1 !important;
+    }
+
+    & .mx-card-delete:hover {
+      stroke: var(--mx-danger-icon) !important;
+      background-color: var(--mx-selection-sidebar) !important;
+    }
+
     /* Thread count as grey capsule */
     & .thread-card-button {
       background-color: var(--mx-capsule) !important;
@@ -157,6 +182,11 @@
     }
 
     /* Selected, list focused: accent surface, accent text colour */
+    &:focus-within .card-layout.selected > td > .card-container .mx-card-delete,
+    &:focus-within .card-layout.selected > td > .card-container .mx-card-delete:hover {
+      stroke: var(--mx-on-accent) !important;
+    }
+
     &:focus-within .card-layout.selected > td > .card-container {
       background-color: var(--mx-accent-selection) !important;
       color: var(--mx-on-accent) !important;

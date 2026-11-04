@@ -96,6 +96,16 @@ Ergebnis: ✅ erfüllt · ❌ Fehler (Issue) · ⚠️ Grenze (siehe README).
 | S-06 | Personen-/Ordner-Filter anklicken | Balken abgerundet, Auswahl in Akzentfarbe; Filter wirkt | | |
 | S-07 | Zeitleiste, „Alle anzeigen“, Popup-Menü eines Filters | Theme-Farben, Menü als Karte mit Schatten | | |
 
+## Schnell-Löschen (D, Add-on)
+
+| ID | Prüfschritt | Erwartet | L | D |
+|---|---|---|---|---|
+| D-01 | Add-on installieren, Maus über eine Karte | grauer Papierkorb neben dem Stern; ohne Hover unsichtbar | | |
+| D-02 | Papierkorb überfahren, dann klicken | rot mit grauer Fläche; Mail landet im Papierkorb, Auswahl bleibt unverändert, ⌘Z holt sie zurück | | |
+| D-03 | Zugeklappter Thread: Papierkorb klicken | ganzer Thread wird gelöscht (wie Entf) | | |
+| D-04 | Ausgewählte Karte | Papierkorb weiß | | |
+| D-05 | Add-on deaktivieren | Knopf verschwindet ohne Neustart, Liste funktioniert normal | | |
+
 ## Abnahme (A) – Akzeptanzkriterien der Spec
 
 | ID | Kriterium | L | D |

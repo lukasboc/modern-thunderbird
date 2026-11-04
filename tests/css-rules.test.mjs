@@ -132,3 +132,12 @@ test('search facets: pill toggles and bars in accent, selected text readable', (
   assert.match(css, /\.bar\[selected\][^{]*\{[^}]*background-color:\s*var\(--mx-accent-selection\) !important/);
   assert.match(css, /--barColor:\s*var\(--mx-accent-icon\) !important/);
 });
+
+// Quick-delete button injected by addon/: hidden until the card is hovered, red on hover.
+test('card delete button: trash icon, revealed on hover, danger on hover, white on selection', () => {
+  const css = read('threadpane.css');
+  assert.match(css, /& \.mx-card-delete\s*\{[^}]*background:[^;]*url\("icons\/delete\.svg"\)[^}]*opacity:\s*0 !important/);
+  assert.match(css, /\.card-layout:is\(:hover, :focus-within\) \.mx-card-delete\s*\{[^}]*opacity:\s*1 !important/);
+  assert.match(css, /\.mx-card-delete:hover\s*\{[^}]*stroke:\s*var\(--mx-danger-icon\) !important/);
+  assert.match(css, /\.card-layout\.selected > td > \.card-container \.mx-card-delete[^{]*\{[^}]*stroke:\s*var\(--mx-on-accent\) !important/);
+});
