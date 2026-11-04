@@ -59,6 +59,7 @@
       border: none !important;
       border-radius: var(--mx-radius-md) !important;
       padding-inline: var(--mx-card-pad-x) !important;
+      column-gap: var(--mx-space-2) !important;
       color: var(--mx-label) !important;
       box-shadow: none !important;
       transition: background-color var(--mx-duration) var(--mx-ease) !important;
@@ -81,6 +82,7 @@
     /* Rows: sender 13/600 + date right 12 secondary; subject 13/400 */
     & .thread-card-row {
       gap: var(--mx-space-2) !important;
+      line-height: var(--mx-line-height) !important;
     }
 
     & .sender,
@@ -115,19 +117,28 @@
     }
 
     /* Unread: 8 px accent dot left of the text column; sender/subject semibold */
-    & .card-layout .read-status {
-      inline-size: var(--mx-unread-dot) !important;
-      block-size: var(--mx-unread-dot) !important;
+    /* TB's dot.svg is a small circle inside 16px; use a full-size dot at the token size */
+    & .card-layout {
+      --read-status-size: var(--mx-unread-dot) !important;
     }
 
     & .card-layout[data-properties~="unread"] {
-      --read-status-fill: var(--mx-accent-icon) !important;
-      --read-status-stroke: var(--mx-accent-icon) !important;
-      --read-status-icon: var(--icon-dot) !important;
+      --read-status-display: inline-block !important;
 
       & .card-container :is(.sender, .subject) {
         font-weight: var(--mx-font-headline-weight) !important;
       }
+    }
+
+    /* Set the icon directly: a url() passed through --read-status-icon would resolve
+     * against Thunderbird's stylesheet and not find the theme file. */
+    & .card-layout[data-properties~="unread"] .read-status {
+      content: url("icons/dot.svg") !important;
+      /* Line-tall box, dot-wide: the SVG is centred in it, i.e. on the sender line */
+      inline-size: var(--mx-unread-dot) !important;
+      block-size: calc(var(--mx-line-height) * var(--mx-font-headline-size)) !important;
+      -moz-context-properties: fill !important;
+      fill: var(--mx-accent-icon) !important;
     }
 
     /* Thread count as grey capsule */
@@ -160,9 +171,8 @@
       }
     }
 
-    &:focus-within .card-layout.selected[data-properties~="unread"] {
-      --read-status-fill: var(--mx-on-accent) !important;
-      --read-status-stroke: var(--mx-on-accent) !important;
+    &:focus-within .card-layout.selected[data-properties~="unread"] .read-status {
+      fill: var(--mx-on-accent) !important;
     }
 
     /* Keyboard "current" row (Ctrl+arrows) stays visible */

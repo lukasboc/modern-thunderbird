@@ -11,6 +11,8 @@ function resolver(mode, map) {
     if (name === 'accent-selection') return clampL(c('accent'), { max: 0.5 });
     if (name === 'accent-icon') return clampL(c('accent'), mode === 'light' ? { max: 0.62 } : { min: 0.6 });
     if (name === 'flag-icon') return mode === 'light' ? mixBlack(c('flag'), 80) : c('flag');
+    if (name === 'danger-icon') return mode === 'light' ? mixBlack(c('danger'), 80) : c('danger');
+    if (name === 'danger-tint') return composite({ ...c('danger'), a: 0.1 }, c('bg-sidebar-opaque'));
     if (name === 'accent-text') return clampL(c('accent'), mode === 'light' ? { max: 0.5 } : { min: 0.72 });
     return parseColor(map.get(`--mx-${name}`));
   };
@@ -29,6 +31,13 @@ const PAIRS = [
   ['flag-icon', 'bg-window', 3],
   ['danger', 'bg-window', 3],
   ['label', 'pressed/bg-sidebar-opaque', 4.5],
+  // notification cards
+  ['label', 'danger-tint', 4.5],
+  ['label-secondary', 'danger-tint', 4.5],
+  ['flag-icon', 'bg-sidebar-opaque', 3],
+  ['danger-icon', 'danger-tint', 3],
+  ['danger-icon', 'bg-window', 3],
+  ['label', 'selection-sidebar/bg-sidebar-opaque', 4.5],
 ];
 
 for (const [mode, map] of [['light', light], ['dark', dark.size ? new Map([...light, ...dark]) : light]]) {

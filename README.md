@@ -36,6 +36,12 @@ Zwei Teile:
 | `layout.css.prefers-reduced-transparency.enabled` | true | „Transparenz reduzieren“ erreicht CSS |
 | `svg.context-properties.content.enabled` | true | die eigenen Icons (`file:`-URLs) dürfen Akzent- und Textfarbe übernehmen; Nebenwirkung: auch Webinhalte dürfen SVG-Context-Paint nutzen |
 
+Einmalig gesetzt (`prefs/defaults.js`, nur wenn das Profil noch keinen Wert hat, danach frei änderbar):
+
+| Pref | Wert | Zweck |
+|---|---|---|
+| `mail.uifontsize` | 14 | UI-Schrift 14 px statt der macOS-Systemgröße 13 px; alle Theme-Größen und Thunderbirds Kartenhöhen wachsen mit. Ändern über ≡ › Schriftgröße. |
+
 Hinweis: Werte in `user.js` setzt Thunderbird bei jedem Start neu. Wer z. B. die Dichte in den Einstellungen ändert, muss sie in `prefs/user.js` ändern und neu installieren.
 
 ## Deinstallation
@@ -64,6 +70,7 @@ npm test   # Tokens, Kontrast, Literal- und !important-Lint, Variablen, Icons, M
 
 - Bereichsdateien (`layout`, `folderpane`, `threadpane`, `messagepane`, `compose`, `preferences`, `content`) verwenden nur `var(--mx-*)` und jede Deklaration mit `!important` – `userChrome.css` ist ein User-Stylesheet und verliert sonst gegen Thunderbirds eigene Styles.
 - Selektoren nur aus `docs/selectors.md`.
+- Größen sind Spec-Pixel × `--mx-unit` (`calc(1rem / 13)`): Thunderbirds Wurzelschrift ist die macOS-Systemgröße von 13 px. So entspricht ein Wert bei Standard-Schriftgröße genau einem Pixel und wächst mit Einstellungen › Schriftgröße mit.
 - `about:preferences` ist ein Content-Dokument: `preferences.css` wird aus `userContent.css` importiert, alles andere aus `userChrome.css`.
 
 ## Lizenz

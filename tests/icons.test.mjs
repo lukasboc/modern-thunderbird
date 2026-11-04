@@ -29,3 +29,10 @@ for (const n of ICONS) {
 test('LICENSE is ISC', () => {
   assert.match(readFileSync(new URL('LICENSE', dir), 'utf8'), /ISC License/);
 });
+
+// Thunderbird's dot.svg draws a ~7px circle inside 16px; scaled to the dot size it all but vanished.
+test('unread dot.svg is a filled circle spanning the whole viewBox', () => {
+  const svg = readFileSync(new URL('dot.svg', dir), 'utf8');
+  assert.match(svg, /viewBox="0 0 16 16"/);
+  assert.match(svg, /<circle[^>]*cx="8"[^>]*cy="8"[^>]*r="8"[^>]*fill="context-fill"/);
+});

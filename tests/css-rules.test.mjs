@@ -63,3 +63,51 @@ test('accent used for icons and text goes through contrast-safe tokens', () => {
     assert.deepEqual(raw, [], f);
   }
 });
+
+test('unread cards set the theme dot directly on .read-status at --mx-unread-dot size', () => {
+  const css = read('threadpane.css');
+  assert.match(css, /\[data-properties~="unread"\] \.read-status\s*\{[^}]*content:\s*url\("icons\/dot\.svg"\) !important/);
+  assert.match(css, /--read-status-size:\s*var\(--mx-unread-dot\)/);
+});
+
+// A relative url() inside a custom property resolves where var() is used (Thunderbird's own
+// stylesheet under chrome://messenger/skin/), so the theme icon is not found there.
+test('no relative url() inside custom properties', () => {
+  for (const f of readdirSync(dir).filter(f => f.endsWith('.css'))) {
+    const hits = [...read(f).matchAll(/(--[a-z0-9-]+)\s*:[^;{}]*url\("(?![a-z]+:)[^"]*"\)/g)].map(m => m[0]);
+    assert.deepEqual(hits, [], f);
+  }
+});
+
+// TB 159 infobar.css paints warnings light-dark(#fff160, #ffe900) with black text – glaring in dark mode.
+test('notifications are calm cards in every chrome document', () => {
+  const css = read('notifications.css');
+  assert.doesNotMatch(css, /@-moz-document/);
+  assert.match(css, /notification-message\s*\{[^}]*--message-bar-background-color:\s*var\(--mx-bg-sidebar-opaque\) !important/);
+  assert.match(css, /notification-message\s*\{[^}]*--message-bar-text-color:\s*var\(--mx-label\) !important/);
+});
+
+test('privacy notice is neutral, warnings amber icon, errors red', () => {
+  const css = read('notifications.css');
+  assert.match(css, /notification-message\[value="remoteContent"\]\s*\{[^}]*--message-bar-icon-color:\s*var\(--mx-label-secondary\) !important/);
+  assert.match(css, /notification-message\[type="warning"\]:not\(\[value="remoteContent"\]\)\s*\{[^}]*--message-bar-icon-color:\s*var\(--mx-flag-icon\) !important/);
+  assert.match(css, /notification-message:is\(\[type="error"\], \[type="critical"\]\)\s*\{[^}]*--message-bar-background-color:\s*var\(--mx-danger-tint\) !important[^}]*--message-bar-icon-color:\s*var\(--mx-danger-icon\) !important/);
+});
+
+test('layout.css no longer styles notifications itself', () => {
+  assert.doesNotMatch(read('layout.css'), /notification-message/);
+});
+
+// The dot sits at the top of its own column; the sender line is 1.5 × font tall. Giving the
+// SVG the line's height (width stays the dot size) centres the dot on the sender line.
+test('unread dot is vertically centred on the sender line', () => {
+  const css = read('threadpane.css');
+  assert.match(css, /\[data-properties~="unread"\] \.read-status\s*\{[^}]*block-size:\s*calc\(var\(--mx-line-height\) \* var\(--mx-font-headline-size\)\) !important/);
+  assert.match(css, /\[data-properties~="unread"\] \.read-status\s*\{[^}]*inline-size:\s*var\(--mx-unread-dot\) !important/);
+  assert.match(css, /& \.thread-card-row\s*\{[^}]*line-height:\s*var\(--mx-line-height\) !important/);
+});
+
+// TB's card grid ("dot column | text column") has no column gap: the dot touched the sender.
+test('8px gap between unread dot column and text column', () => {
+  assert.match(read('threadpane.css'), /& \.card-layout > td > \.card-container\s*\{[^}]*column-gap:\s*var\(--mx-space-2\) !important/);
+});

@@ -66,7 +66,7 @@ Laufzeitfragen, die nur im laufenden Programm beantwortbar sind, stehen unter �
 | M5 | Vibrancy | Keine Thunderbird-CSS nutzt `-moz-sidebar`-Appearance. **offen (Laufzeit)** → Standard: deckendes `--mx-bg-sidebar-opaque`. |
 | M6 | `prefers-reduced-transparency` | Gecko-Pref `layout.css.prefers-reduced-transparency.enabled`. **offen (Laufzeit)**. Da Standard deckend (M5), ohne Wirkung auf das Ergebnis. |
 | M7 | `AccentColor` folgt macOS | **offen (Laufzeit)**. TB 159 hat eine eigene Akzent-Option (Einstellungen › Darstellung › `accent-color-os`), die auf „System“ stehen muss. |
-| M8 | rem skaliert | **ja**. `UIFontSize.sys.mjs` setzt `font-size` auf `documentElement` jedes registrierten Fensters. |
+| M8 | rem skaliert | **ja**. `UIFontSize.sys.mjs` setzt `font-size` auf `documentElement` jedes registrierten Fensters. **Basis ist die macOS-Systemschrift (13 px), nicht 16 px** (`osValue` = berechnete Wurzelgröße). Deshalb `--mx-unit: calc(1rem / 13)`; Nachrichteninhalt und Composer-Editor (Content-Dokumente, 16 px) setzen die Einheit auf 1px. |
 | M9 | `dark_theme` / `color_scheme` im Manifest | **offen (Laufzeit)**; Gecko ≥ 106 kennt beides. |
 | M10 | URL-Präfixe | siehe Dokumente. EWS/Graph-Nachrichten-URLs nicht verifiziert → offen. |
 | M11 | Anhänge als Kacheln | keine Pref gefunden → reines CSS auf `#attachmentList`. |

@@ -27,6 +27,13 @@ else
   ln -s "$repo/chrome" "$link"
 fi
 
+# One-time defaults: only where prefs.js has no value yet (stays adjustable in Thunderbird).
+while IFS= read -r line; do
+  name="$(printf '%s\n' "$line" | sed -n 's/^user_pref("\([^"]*\)".*/\1/p')"
+  [[ -n "$name" ]] || continue
+  grep -qF "user_pref(\"$name\"," "$profile/prefs.js" || printf '%s\n' "$line" >> "$profile/prefs.js"
+done < "$repo/prefs/defaults.js"
+
 userjs="$profile/user.js"
 if [[ -f "$userjs" ]] && grep -qF "$begin" "$userjs"; then
   echo "prefs already installed"

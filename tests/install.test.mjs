@@ -126,3 +126,30 @@ test('uninstall preserves prefs.js mode', () => {
   run('uninstall.sh', profile);
   assert.equal(statSync(prefs).mode & 0o777, 0o600);
 });
+
+// One-time defaults go into prefs.js (user stays free to change them), not user.js (re-applied every start).
+test('install sets UI font size 14 once in prefs.js, not in user.js', () => {
+  run('install.sh', profile);
+  assert.match(readFileSync(join(profile, 'prefs.js'), 'utf8'), /^user_pref\("mail\.uifontsize", 14\);$/m);
+  assert.doesNotMatch(readFileSync(join(profile, 'user.js'), 'utf8'), /mail\.uifontsize/);
+});
+
+test('install keeps a UI font size the user already chose', () => {
+  writeFileSync(join(profile, 'prefs.js'), 'user_pref("mail.uifontsize", 18);\n');
+  run('install.sh', profile);
+  assert.equal(readFileSync(join(profile, 'prefs.js'), 'utf8'), 'user_pref("mail.uifontsize", 18);\n');
+});
+
+test('uninstall removes the one-time UI font size', () => {
+  run('install.sh', profile);
+  run('uninstall.sh', profile);
+  assert.doesNotMatch(readFileSync(join(profile, 'prefs.js'), 'utf8'), /mail\.uifontsize/);
+});
+
+test('re-running install on an installed profile adds new one-time defaults', () => {
+  run('install.sh', profile);
+  writeFileSync(join(profile, 'prefs.js'), '');
+  const r = run('install.sh', profile);
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(readFileSync(join(profile, 'prefs.js'), 'utf8'), /mail\.uifontsize", 14/);
+});

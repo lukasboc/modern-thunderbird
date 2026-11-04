@@ -167,16 +167,6 @@
     --panel-list-border-color: var(--mx-separator) !important;
   }
 
-  /* Notification bars: capsule, accent tint, no yellow */
-  notification-message {
-    margin: var(--mx-space-2) !important;
-    border: none !important;
-    border-radius: var(--mx-radius-md) !important;
-    background-color: var(--mx-accent-tint) !important;
-    color: var(--mx-label) !important;
-    box-shadow: none !important;
-  }
-
   /* Keyboard focus only */
   :focus-visible {
     outline: var(--mx-focus-width) solid var(--mx-focus-ring) !important;
