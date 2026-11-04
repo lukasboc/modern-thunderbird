@@ -40,7 +40,7 @@ Einmalig gesetzt (`prefs/defaults.js`, nur wenn das Profil noch keinen Wert hat,
 
 | Pref | Wert | Zweck |
 |---|---|---|
-| `mail.uifontsize` | 15 | UI-Schrift 15 px statt der macOS-Systemgröße 13 px; alle Theme-Größen und Thunderbirds Kartenhöhen wachsen mit. Ändern über ≡ › Schriftgröße. |
+| `mail.uifontsize` | 14 | UI-Schrift 14 px statt der macOS-Systemgröße 13 px; alle Theme-Größen und Thunderbirds Kartenhöhen wachsen mit. Ändern über ≡ › Schriftgröße. |
 
 Hinweis: Werte in `user.js` setzt Thunderbird bei jedem Start neu. Wer z. B. die Dichte in den Einstellungen ändert, muss sie in `prefs/user.js` ändern und neu installieren.
 
