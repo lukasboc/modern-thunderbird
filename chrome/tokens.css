@@ -76,7 +76,7 @@
   --mx-icon-sm: calc(16 * var(--mx-unit));
   --mx-icon-md: calc(18 * var(--mx-unit));
   --mx-avatar: calc(40 * var(--mx-unit));
-  --mx-unread-dot: calc(8 * var(--mx-unit));
+  --mx-unread-dot: calc(10 * var(--mx-unit));
   --mx-message-max: calc(720 * var(--mx-unit));
   --mx-card-pad-y: calc(10 * var(--mx-unit));
   --mx-card-pad-x: calc(16 * var(--mx-unit));

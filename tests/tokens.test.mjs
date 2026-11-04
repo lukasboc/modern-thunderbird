@@ -67,7 +67,7 @@ test('measurement tokens', () => {
   const expected = {
     '--mx-toolbar-height': u(52), '--mx-search-height': u(28), '--mx-folder-row': u(28),
     '--mx-icon-sm': u(16), '--mx-icon-md': u(18), '--mx-avatar': u(40),
-    '--mx-unread-dot': u(8), '--mx-message-max': u(720),
+    '--mx-unread-dot': u(10), '--mx-message-max': u(720),
     '--mx-card-pad-y': u(10), '--mx-card-pad-x': u(16), '--mx-card-inset': u(6),
     '--mx-spaces-width': u(44),
   };

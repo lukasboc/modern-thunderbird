@@ -63,3 +63,9 @@ test('accent used for icons and text goes through contrast-safe tokens', () => {
     assert.deepEqual(raw, [], f);
   }
 });
+
+test('unread cards use the theme dot at --mx-unread-dot size', () => {
+  const css = read('threadpane.css');
+  assert.match(css, /--read-status-icon:\s*url\("icons\/dot\.svg"\)/);
+  assert.match(css, /--read-status-size:\s*var\(--mx-unread-dot\)/);
+});

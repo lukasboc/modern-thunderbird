@@ -115,15 +115,15 @@
     }
 
     /* Unread: 8 px accent dot left of the text column; sender/subject semibold */
-    & .card-layout .read-status {
-      inline-size: var(--mx-unread-dot) !important;
-      block-size: var(--mx-unread-dot) !important;
+    /* TB's dot.svg is a small circle inside 16px; use a full-size dot at the token size */
+    & .card-layout {
+      --read-status-size: var(--mx-unread-dot) !important;
     }
 
     & .card-layout[data-properties~="unread"] {
       --read-status-fill: var(--mx-accent-icon) !important;
       --read-status-stroke: var(--mx-accent-icon) !important;
-      --read-status-icon: var(--icon-dot) !important;
+      --read-status-icon: url("icons/dot.svg") !important;
 
       & .card-container :is(.sender, .subject) {
         font-weight: var(--mx-font-headline-weight) !important;
