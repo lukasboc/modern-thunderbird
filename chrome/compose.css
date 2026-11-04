@@ -1,0 +1,101 @@
+/* Composer window. Selectors: docs/selectors.md. Values: tokens.css only. */
+@-moz-document url("chrome://messenger/content/messengercompose/messengercompose.xhtml") {
+
+  :root {
+    --layout-background-0: var(--mx-bg-window) !important;
+    --layout-background-1: var(--mx-bg-window) !important;
+    --layout-color-1: var(--mx-label) !important;
+    --layout-color-2: var(--mx-label-secondary) !important;
+    --toolbar-background-color: var(--mx-bg-toolbar) !important;
+    font-family: var(--mx-font-family) !important;
+  }
+
+  /* Toolbar: flat; Send = accent paper plane, first (top left) */
+  #composeToolbar2 {
+    background-color: var(--mx-bg-toolbar) !important;
+    border: none !important;
+    border-block-end: var(--mx-hairline) solid var(--mx-separator) !important;
+    min-block-size: var(--mx-toolbar-height) !important;
+  }
+
+  #composeToolbar2 toolbarbutton {
+    border: none !important;
+    border-radius: var(--mx-radius-sm) !important;
+    background-color: var(--mx-transparent) !important;
+    color: var(--mx-label-secondary) !important;
+
+    &:hover {
+      background-color: var(--mx-selection-sidebar) !important;
+      color: var(--mx-label) !important;
+    }
+
+    &:hover:active {
+      background-color: var(--mx-pressed) !important;
+    }
+  }
+
+  #button-send {
+    order: -1 !important;
+    list-style-image: url("icons/send-plane.svg") !important;
+    -moz-context-properties: fill, stroke !important;
+    fill: var(--mx-transparent) !important;
+    stroke: var(--mx-accent-icon) !important;
+    color: var(--mx-accent-text) !important;
+
+    & .toolbarbutton-text {
+      display: none !important;
+    }
+  }
+
+  /* Header fields: rows without frames, hairline only */
+  #MsgHeadersToolbar {
+    background-color: var(--mx-bg-window) !important;
+    border: none !important;
+    padding-inline: var(--mx-space-4) !important;
+  }
+
+  .address-row,
+  #msgSubjectContainer {
+    border: none !important;
+    border-block-end: var(--mx-hairline) solid var(--mx-separator) !important;
+    padding-block: var(--mx-space-1) !important;
+  }
+
+  .address-container,
+  #msgSubject {
+    border: none !important;
+    border-radius: var(--mx-radius-lg) !important;
+    background-color: var(--mx-transparent) !important;
+    box-shadow: none !important;
+    color: var(--mx-label) !important;
+    font-size: var(--mx-font-body-size) !important;
+  }
+
+  .address-container:focus-within,
+  #msgSubject:focus-visible {
+    outline: var(--mx-focus-width) solid var(--mx-focus-ring) !important;
+  }
+
+  .address-label-container label {
+    color: var(--mx-label-secondary) !important;
+    font-size: var(--mx-font-body-size) !important;
+  }
+
+  /* Formatting bar: flat (hide via View › Toolbars › Formatting Bar) */
+  #FormatToolbar {
+    background-color: var(--mx-bg-window) !important;
+    border: none !important;
+    border-block-end: var(--mx-hairline) solid var(--mx-separator) !important;
+  }
+
+  #FormatToolbar toolbarbutton,
+  #FormatToolbar menulist {
+    border: none !important;
+    border-radius: var(--mx-radius-sm) !important;
+    background-color: var(--mx-transparent) !important;
+  }
+
+  #messageEditor {
+    background-color: var(--mx-bg-window) !important;
+  }
+}

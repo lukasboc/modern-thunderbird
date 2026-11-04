@@ -1,0 +1,122 @@
+/* about:3pane – folder pane. Selectors: docs/selectors.md. Values: tokens.css only.
+ * User sheet: every declaration is !important (it would lose to Thunderbird's author styles otherwise).
+ * User !important also beats Thunderbird's own !important, so busy/error states are excluded explicitly. */
+@-moz-document url("about:3pane") {
+
+  :root,
+  #folderTree {
+    --sidebar-background: var(--mx-bg-sidebar-opaque) !important;
+    --sidebar-background-color: var(--mx-bg-sidebar-opaque) !important;
+    --sidebar-color: var(--mx-label) !important;
+    --sidebar-border: var(--mx-separator) !important;
+    --treeitem-background-selected: var(--mx-selection-sidebar) !important;
+    --treeitem-background-hover: var(--mx-selection-sidebar) !important;
+    --treeitem-background-active: var(--mx-selection-sidebar) !important;
+    --treeitem-text-active: var(--mx-label) !important;
+    --folderpane-unread-count-background: var(--mx-transparent) !important;
+    --folderpane-unread-count-text: var(--mx-label-secondary) !important;
+  }
+
+  /* No vibrancy without Gecko internals (docs/selectors.md M5): spec fallback = opaque */
+  #folderPane {
+    background-color: var(--mx-bg-sidebar-opaque) !important;
+    color: var(--mx-label) !important;
+    border-inline-end: var(--mx-hairline) solid var(--mx-separator) !important;
+    font-family: var(--mx-font-family) !important;
+  }
+
+  #folderPaneHeaderBar {
+    background-color: var(--mx-transparent) !important;
+    border: none !important;
+  }
+
+  /* Rows: 28 px, 6 px pill on selection, text stays primary */
+  #folderTree li > .container {
+    min-block-size: var(--mx-folder-row) !important;
+    margin-inline: var(--mx-space-2) !important;
+    border: none !important;
+    border-radius: var(--mx-radius-sm) !important;
+    font-size: var(--mx-font-body-size) !important;
+    font-weight: var(--mx-font-body-weight) !important;
+    gap: var(--mx-space-2) !important;
+    transition: background-color var(--mx-duration) var(--mx-ease) !important;
+  }
+
+  #folderTree li > .container:hover {
+    background-color: var(--mx-selection-sidebar) !important;
+  }
+
+  #folderTree li.selected > .container,
+  #folderTree:focus-within li.selected > .container {
+    background-color: var(--mx-selection-sidebar) !important;
+    color: var(--mx-label) !important;
+  }
+
+  #folderTree li.selected > .container:active {
+    background-color: var(--mx-pressed) !important;
+  }
+
+  /* Group headings (Favourites, modes): 11 px / 600, secondary */
+  #folderTree li[data-mode] > .mode-container {
+    border: none !important;
+    background-color: var(--mx-transparent) !important;
+  }
+
+  #folderTree li[data-mode] > .mode-container > .mode-name {
+    font-size: var(--mx-font-section-size) !important;
+    font-weight: var(--mx-font-section-weight) !important;
+    color: var(--mx-label-secondary) !important;
+    padding-inline: var(--mx-space-3) !important;
+  }
+
+  /* Account rows act as section headings, without account icons */
+  #folderTree li[data-server-type] > .container > .name {
+    font-size: var(--mx-font-section-size) !important;
+    font-weight: var(--mx-font-section-weight) !important;
+    color: var(--mx-label-secondary) !important;
+  }
+
+  #folderTree li[data-server-type]:not([data-is-busy="true"], [data-has-error="true"], .tls-error) > .container > .icon {
+    display: none !important;
+  }
+
+  /* Icons: 16 px line icons in accent colour */
+  #folderTree li:not([data-is-busy="true"], [data-has-error="true"], .tls-error) > .container > .icon {
+    inline-size: var(--mx-icon-sm) !important;
+    block-size: var(--mx-icon-sm) !important;
+    content: url("icons/folder.svg") !important;
+    -moz-context-properties: fill, stroke !important;
+    fill: var(--mx-transparent) !important;
+    stroke: var(--mx-accent-icon) !important;
+  }
+
+  #folderTree li:not([data-is-busy="true"], [data-has-error="true"], .tls-error) {
+    &[data-folder-type="inbox"] > .container > .icon { content: url("icons/inbox.svg") !important; }
+    &[data-folder-type="sent"] > .container > .icon { content: url("icons/send.svg") !important; }
+    &[data-folder-type="drafts"] > .container > .icon { content: url("icons/drafts.svg") !important; }
+    &[data-folder-type="templates"] > .container > .icon { content: url("icons/drafts.svg") !important; }
+    &[data-folder-type="archive"] > .container > .icon { content: url("icons/archive.svg") !important; }
+    &[data-folder-type="trash"] > .container > .icon { content: url("icons/trash.svg") !important; }
+    &[data-folder-type="junk"] > .container > .icon { content: url("icons/junk.svg") !important; }
+    &[data-folder-type="outbox"] > .container > .icon { content: url("icons/send-plane.svg") !important; }
+    &[data-folder-type="virtual"] > .container > .icon { content: url("icons/smart-folder.svg") !important; }
+  }
+
+  /* Counters: right, 12 px secondary, no badge */
+  #folderTree .folder-count-badge,
+  #folderTree li.selected > .container > .unread-count,
+  #folderTree:focus-within li.selected > .container > .unread-count {
+    background-color: var(--mx-transparent) !important;
+    border: none !important;
+    color: var(--mx-label-secondary) !important;
+    font-size: var(--mx-font-caption-size) !important;
+    font-weight: var(--mx-font-caption-weight) !important;
+    padding-inline: var(--mx-space-0) !important;
+  }
+
+  /* Drag & drop target stays visible */
+  #folderTree li.drop-target > .container {
+    background-color: var(--mx-accent-tint) !important;
+    outline: var(--mx-hairline) solid var(--mx-accent-icon) !important;
+  }
+}

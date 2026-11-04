@@ -1,0 +1,78 @@
+/* Message content (content documents). Values: tokens.css only.
+ * Screen only: printing keeps the mail's own colours (dark text on white paper). */
+@-moz-document url-prefix("imap:"), url-prefix("mailbox:"), url-prefix("news:"), url-prefix("snews:") {
+  @media screen {
+    /* Text column: max 720 px, centred, 24 px padding. Wider content (newsletter tables)
+     * overflows visibly and the document scrolls horizontally – nothing is clipped. */
+    body {
+      max-inline-size: var(--mx-message-max) !important;
+      margin-inline: auto !important;
+      padding: var(--mx-space-5) !important;
+      font-family: var(--mx-font-family) !important;
+      box-sizing: border-box !important;
+    }
+  }
+
+  /* Dark mode: every mail is shown dark, own HTML colours are overridden (spec decision). Images stay.
+   * Follows Thunderbird's per-message "dark mode off" toggle (mail.dark-reader.enabled). */
+  @media screen and (prefers-color-scheme: dark) and -moz-pref("mail.dark-reader.enabled") {
+    :root,
+    body {
+      background-color: var(--mx-bg-window) !important;
+      color: var(--mx-label) !important;
+      color-scheme: dark !important;
+    }
+
+    body *:not(img, svg, video, picture, canvas, iframe) {
+      background-color: var(--mx-transparent) !important;
+      color: var(--mx-label) !important;
+      border-color: var(--mx-separator) !important;
+    }
+
+    body a:link,
+    body a:visited,
+    body a:link *,
+    body a:visited * {
+      color: var(--mx-accent-text) !important;
+    }
+
+    blockquote[type="cite"] {
+      border-inline-start-color: var(--mx-accent-icon) !important;
+      color: var(--mx-label-secondary) !important;
+    }
+
+    .moz-txt-sig,
+    .moz-signature {
+      color: var(--mx-label-secondary) !important;
+    }
+  }
+}
+
+/* Composer editor: window surface, dark in dark mode. Display only – stylesheet colours are
+ * never serialised into the sent mail. */
+@-moz-document url-prefix("about:blank?compose") {
+  @media screen {
+    :root,
+    body {
+      background-color: var(--mx-bg-window) !important;
+      color: var(--mx-label) !important;
+    }
+
+    body {
+      padding: var(--mx-space-4) !important;
+    }
+
+    a:link,
+    a:visited {
+      color: var(--mx-accent-text) !important;
+    }
+  }
+
+  /* Quoted mail in a dark editor: inline black text would be invisible */
+  @media screen and (prefers-color-scheme: dark) {
+    blockquote[type="cite"] * {
+      color: var(--mx-label) !important;
+      background-color: var(--mx-transparent) !important;
+    }
+  }
+}

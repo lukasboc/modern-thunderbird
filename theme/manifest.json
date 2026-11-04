@@ -1,0 +1,49 @@
+{
+  "manifest_version": 2,
+  "name": "Modern Thunderbird Light/Dark",
+  "description": "Calm, airy colours with the system font and accent colour. Pair with the chrome/ stylesheets.",
+  "version": "1.0.0",
+  "browser_specific_settings": {
+    "gecko": { "id": "modern-thunderbird-theme@local", "strict_min_version": "128.0" }
+  },
+  "theme": {
+    "colors": {
+      "frame": "#F6F6F6",
+      "toolbar": "#F6F6F6",
+      "tab_background_text": "rgba(0,0,0,0.85)",
+      "toolbar_text": "rgba(0,0,0,0.85)",
+      "sidebar": "#F6F6F6",
+      "sidebar_text": "rgba(0,0,0,0.85)",
+      "sidebar_highlight": "rgba(0,0,0,0.08)",
+      "sidebar_highlight_text": "rgba(0,0,0,0.85)",
+      "popup": "#FFFFFF",
+      "popup_text": "rgba(0,0,0,0.85)",
+      "popup_border": "rgba(0,0,0,0.10)",
+      "toolbar_field": "#FFFFFF",
+      "toolbar_field_text": "rgba(0,0,0,0.85)",
+      "toolbar_bottom_separator": "rgba(0,0,0,0.10)",
+      "tab_line": "#007AFF"
+    },
+    "properties": { "color_scheme": "system" }
+  },
+  "dark_theme": {
+    "colors": {
+      "frame": "#2B2B2B",
+      "toolbar": "#2B2B2B",
+      "tab_background_text": "rgba(255,255,255,0.85)",
+      "toolbar_text": "rgba(255,255,255,0.85)",
+      "sidebar": "#282828",
+      "sidebar_text": "rgba(255,255,255,0.85)",
+      "sidebar_highlight": "rgba(255,255,255,0.10)",
+      "sidebar_highlight_text": "rgba(255,255,255,0.85)",
+      "popup": "#1E1E1E",
+      "popup_text": "rgba(255,255,255,0.85)",
+      "popup_border": "rgba(255,255,255,0.10)",
+      "toolbar_field": "#1E1E1E",
+      "toolbar_field_text": "rgba(255,255,255,0.85)",
+      "toolbar_bottom_separator": "rgba(255,255,255,0.10)",
+      "tab_line": "#0A84FF"
+    },
+    "properties": { "color_scheme": "system" }
+  }
+}

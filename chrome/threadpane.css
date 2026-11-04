@@ -1,0 +1,189 @@
+/* about:3pane – message list (cards). Selectors: docs/selectors.md. Values: tokens.css only.
+ * Card height is computed in JS (mail.uidensity, rowcount; docs/selectors.md M2):
+ * vertical padding stays inside Thunderbird's budget, only horizontal spacing is ours. */
+@-moz-document url("about:3pane") {
+
+  :root,
+  #threadTree {
+    --tree-pane-background: var(--mx-bg-window) !important;
+    --tree-view-bg: var(--mx-bg-window) !important;
+    --tree-view-color: var(--mx-label) !important;
+    --new-subject-color: var(--mx-label) !important;
+    --thread-pane-flag-fill: var(--mx-flag-icon) !important;
+    --thread-pane-flag-stroke: var(--mx-flag-icon) !important;
+  }
+
+  #threadPane {
+    background-color: var(--mx-bg-window) !important;
+    font-family: var(--mx-font-family) !important;
+  }
+
+  /* Header: folder name 13/600 + count 12 secondary (stands in for the window title; plan deviation 2) */
+  #threadPaneHeaderBar {
+    background-color: var(--mx-bg-window) !important;
+    border: none !important;
+    padding-inline: var(--mx-card-pad-x) !important;
+  }
+
+  #threadPaneFolderName {
+    font-size: var(--mx-font-headline-size) !important;
+    font-weight: var(--mx-font-headline-weight) !important;
+    color: var(--mx-label) !important;
+  }
+
+  #threadPaneFolderCount,
+  #threadPaneSelectedCount {
+    font-size: var(--mx-font-caption-size) !important;
+    font-weight: var(--mx-font-caption-weight) !important;
+    color: var(--mx-label-secondary) !important;
+  }
+
+  /* Quick filter bar: flat */
+  #quickFilterBarContainer {
+    background-color: var(--mx-bg-window) !important;
+    border: none !important;
+  }
+
+  /* Cards */
+  #threadTree[rows="thread-card"] {
+    background-color: var(--mx-bg-window) !important;
+
+    /* Only the end side: the start side carries Thunderbird's thread-child indent */
+    & .card-layout > td {
+      padding-inline-end: var(--mx-card-inset) !important;
+    }
+
+    & .card-layout > td > .card-container {
+      position: relative !important;
+      background-color: var(--mx-bg-window) !important;
+      border: none !important;
+      border-radius: var(--mx-radius-md) !important;
+      padding-inline: var(--mx-card-pad-x) !important;
+      color: var(--mx-label) !important;
+      box-shadow: none !important;
+      transition: background-color var(--mx-duration) var(--mx-ease) !important;
+    }
+
+    /* Hairline separator, inset from the text start */
+    & .card-layout > td > .card-container::after {
+      content: "" !important;
+      position: absolute !important;
+      inset-inline-start: var(--mx-card-pad-x) !important;
+      inset-inline-end: var(--mx-space-0) !important;
+      inset-block-end: var(--mx-space-0) !important;
+      border-block-end: var(--mx-hairline) solid var(--mx-separator) !important;
+    }
+
+    & .card-layout:is(.selected, :hover) > td > .card-container::after {
+      border-block-end-color: var(--mx-transparent) !important;
+    }
+
+    /* Rows: sender 13/600 + date right 12 secondary; subject 13/400 */
+    & .thread-card-row {
+      gap: var(--mx-space-2) !important;
+    }
+
+    & .sender,
+    & .subject {
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      min-inline-size: var(--mx-space-0) !important;
+    }
+
+    & .sender {
+      flex: 1 1 auto !important;
+      font-size: var(--mx-font-headline-size) !important;
+      font-weight: var(--mx-font-headline-weight) !important;
+    }
+
+    & .date {
+      flex: none !important;
+      font-size: var(--mx-font-caption-size) !important;
+      font-weight: var(--mx-font-caption-weight) !important;
+      color: var(--mx-label-secondary) !important;
+    }
+
+    & .subject {
+      font-size: var(--mx-font-body-size) !important;
+      font-weight: var(--mx-font-body-weight) !important;
+    }
+
+    & .sort-header-details {
+      font-size: var(--mx-font-caption-size) !important;
+      color: var(--mx-label-secondary) !important;
+    }
+
+    /* Unread: 8 px accent dot left of the text column; sender/subject semibold */
+    & .card-layout .read-status {
+      inline-size: var(--mx-unread-dot) !important;
+      block-size: var(--mx-unread-dot) !important;
+    }
+
+    & .card-layout[data-properties~="unread"] {
+      --read-status-fill: var(--mx-accent-icon) !important;
+      --read-status-stroke: var(--mx-accent-icon) !important;
+      --read-status-icon: var(--icon-dot) !important;
+
+      & .card-container :is(.sender, .subject) {
+        font-weight: var(--mx-font-headline-weight) !important;
+      }
+    }
+
+    /* Thread count as grey capsule */
+    & .thread-card-button {
+      background-color: var(--mx-capsule) !important;
+      border: none !important;
+      border-radius: var(--mx-radius-pill) !important;
+      color: var(--mx-label-secondary) !important;
+      font-size: var(--mx-font-caption-size) !important;
+      padding-inline: var(--mx-space-2) !important;
+    }
+
+    /* Hover */
+    & .card-layout:hover:not(.selected) > td > .card-container {
+      background-color: var(--mx-selection-sidebar) !important;
+    }
+
+    /* Selected, list focused: accent surface, accent text colour */
+    &:focus-within .card-layout.selected > td > .card-container {
+      background-color: var(--mx-accent-selection) !important;
+      color: var(--mx-on-accent) !important;
+
+      & :is(.sender, .subject, .date, .sort-header-details, .thread-card-button) {
+        color: var(--mx-on-accent) !important;
+      }
+
+      & :is(.replies-icon, .attachment-icon, .tree-button-more) {
+        fill: currentColor !important;
+        stroke: currentColor !important;
+      }
+    }
+
+    &:focus-within .card-layout.selected[data-properties~="unread"] {
+      --read-status-fill: var(--mx-on-accent) !important;
+      --read-status-stroke: var(--mx-on-accent) !important;
+    }
+
+    /* Keyboard "current" row (Ctrl+arrows) stays visible */
+    &:focus-within .card-layout.current:not(.selected) > td > .card-container {
+      outline: var(--mx-focus-width) solid var(--mx-focus-ring) !important;
+      outline-offset: calc(-1 * var(--mx-focus-width)) !important;
+    }
+
+    /* Selected, list or window inactive: grey, text primary */
+    &:not(:focus-within) .card-layout.selected > td > .card-container {
+      background-color: var(--mx-selection-inactive) !important;
+      color: var(--mx-label) !important;
+    }
+  }
+
+  :root:-moz-window-inactive #threadTree[rows="thread-card"] .card-layout.selected > td > .card-container {
+    background-color: var(--mx-selection-inactive) !important;
+    color: var(--mx-label) !important;
+
+    & :is(.sender, .subject, .date, .sort-header-details, .thread-card-button) {
+      color: var(--mx-label) !important;
+    }
+  }
+}
