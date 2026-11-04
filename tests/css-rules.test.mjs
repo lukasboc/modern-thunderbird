@@ -111,3 +111,24 @@ test('unread dot is vertically centred on the sender line', () => {
 test('8px gap between unread dot column and text column', () => {
   assert.match(read('threadpane.css'), /& \.card-layout > td > \.card-container\s*\{[^}]*column-gap:\s*var\(--mx-space-2\) !important/);
 });
+
+// Global search results (glodaFacetView.xhtml): cards like the message list instead of grey boxes.
+test('search results are styled as cards in their own document', () => {
+  const css = read('search.css');
+  assert.match(css, /@-moz-document url\("chrome:\/\/messenger\/content\/glodaFacetView\.xhtml"\)/);
+  assert.match(css, /\.message\s*\{[^}]*border-radius:\s*var\(--mx-radius-md\) !important/);
+  assert.match(css, /\.message-author\s*\{[^}]*font-weight:\s*var\(--mx-font-headline-weight\) !important/);
+});
+
+test('search snippet uses the system font, two lines, secondary colour', () => {
+  const css = read('search.css');
+  assert.match(css, /\.message-body\s*\{[^}]*font-family:\s*var\(--mx-font-family\) !important[^}]*-webkit-line-clamp:\s*2 !important/);
+  assert.match(css, /\.message-body-fulltext-match\s*\{[^}]*background-color:\s*var\(--mx-accent-tint\) !important[^}]*color:\s*var\(--mx-label\) !important/);
+});
+
+test('search facets: pill toggles and bars in accent, selected text readable', () => {
+  const css = read('search.css');
+  assert.match(css, /\[checked\]:not\(\[disabled\]\) > \.facet-checkbox-bubble[^{]*\{[^}]*background-color:\s*var\(--mx-accent-selection\) !important[^}]*color:\s*var\(--mx-on-accent\) !important/);
+  assert.match(css, /\.bar\[selected\][^{]*\{[^}]*background-color:\s*var\(--mx-accent-selection\) !important/);
+  assert.match(css, /--barColor:\s*var\(--mx-accent-icon\) !important/);
+});

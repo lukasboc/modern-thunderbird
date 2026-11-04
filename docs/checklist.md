@@ -84,6 +84,18 @@ Ergebnis: ✅ erfüllt · ❌ Fehler (Issue) · ⚠️ Grenze (siehe README).
 | P-01 | Einstellungen öffnen | Kategorien-Seitenleiste wie Ordnerleiste (graue Pille) | | |
 | P-02 | Inhalte | gruppierte Karten mit 10 px Radius auf grauem Grund | | |
 
+## Suchergebnisse (S)
+
+| ID | Prüfschritt | Erwartet | L | D |
+|---|---|---|---|---|
+| S-01 | Suchbegriff oben rechts eingeben, Enter | Ergebnis-Tab: Suchbegriff groß (22/700), Erklärung grau | | |
+| S-02 | Ergebnisliste | Karten: Absender 13/600, Datum grau rechts, Betreff 13/400, Textauszug grau in Systemschrift, max. 2 Zeilen | | |
+| S-03 | Fundstellen im Textauszug | dezent hinterlegt (Akzent 12 %), Text lesbar | | |
+| S-04 | Maus über Ergebnis | graue Fläche, Betreff in Akzentfarbe; Klick öffnet die Mail | | |
+| S-05 | Filterspalte | Seitenleisten-Fläche, Abschnittstitel 11/600 grau; Ja/Nein-Filter als Pillen, aktiv in Akzentfarbe mit weißem Text | | |
+| S-06 | Personen-/Ordner-Filter anklicken | Balken abgerundet, Auswahl in Akzentfarbe; Filter wirkt | | |
+| S-07 | Zeitleiste, „Alle anzeigen“, Popup-Menü eines Filters | Theme-Farben, Menü als Karte mit Schatten | | |
+
 ## Abnahme (A) – Akzeptanzkriterien der Spec
 
 | ID | Kriterium | L | D |
