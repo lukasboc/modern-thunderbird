@@ -81,6 +81,7 @@
     /* Rows: sender 13/600 + date right 12 secondary; subject 13/400 */
     & .thread-card-row {
       gap: var(--mx-space-2) !important;
+      line-height: var(--mx-line-height) !important;
     }
 
     & .sender,
@@ -132,6 +133,9 @@
      * against Thunderbird's stylesheet and not find the theme file. */
     & .card-layout[data-properties~="unread"] .read-status {
       content: url("icons/dot.svg") !important;
+      /* Line-tall box, dot-wide: the SVG is centred in it, i.e. on the sender line */
+      inline-size: var(--mx-unread-dot) !important;
+      block-size: calc(var(--mx-line-height) * var(--mx-font-headline-size)) !important;
       -moz-context-properties: fill !important;
       fill: var(--mx-accent-icon) !important;
     }

@@ -70,6 +70,7 @@
   --mx-ease: ease-out;
   --mx-hairline: 1px;
   --mx-focus-width: 3px;
+  --mx-line-height: 1.5;
 
   /* Measurements */
   --mx-toolbar-height: calc(52 * var(--mx-unit));

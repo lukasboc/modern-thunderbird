@@ -58,7 +58,7 @@ test('spacing, radii and effects', () => {
     '--mx-radius-sm': u(6), '--mx-radius-md': u(8), '--mx-radius-lg': u(10),
     '--mx-shadow-popup': '0 8px 24px rgba(0,0,0,0.18)',
     '--mx-duration': '180ms', '--mx-ease': 'ease-out',
-    '--mx-hairline': '1px', '--mx-focus-width': '3px',
+    '--mx-hairline': '1px', '--mx-focus-width': '3px', '--mx-line-height': '1.5',
   };
   for (const [k, v] of Object.entries(expected)) assert.equal(light.get(k), v, k);
 });

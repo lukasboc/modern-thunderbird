@@ -97,3 +97,12 @@ test('privacy notice is neutral, warnings amber icon, errors red', () => {
 test('layout.css no longer styles notifications itself', () => {
   assert.doesNotMatch(read('layout.css'), /notification-message/);
 });
+
+// The dot sits at the top of its own column; the sender line is 1.5 × font tall. Giving the
+// SVG the line's height (width stays the dot size) centres the dot on the sender line.
+test('unread dot is vertically centred on the sender line', () => {
+  const css = read('threadpane.css');
+  assert.match(css, /\[data-properties~="unread"\] \.read-status\s*\{[^}]*block-size:\s*calc\(var\(--mx-line-height\) \* var\(--mx-font-headline-size\)\) !important/);
+  assert.match(css, /\[data-properties~="unread"\] \.read-status\s*\{[^}]*inline-size:\s*var\(--mx-unread-dot\) !important/);
+  assert.match(css, /& \.thread-card-row\s*\{[^}]*line-height:\s*var\(--mx-line-height\) !important/);
+});
