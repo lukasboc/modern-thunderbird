@@ -121,13 +121,19 @@
     }
 
     & .card-layout[data-properties~="unread"] {
-      --read-status-fill: var(--mx-accent-icon) !important;
-      --read-status-stroke: var(--mx-accent-icon) !important;
-      --read-status-icon: url("icons/dot.svg") !important;
+      --read-status-display: inline-block !important;
 
       & .card-container :is(.sender, .subject) {
         font-weight: var(--mx-font-headline-weight) !important;
       }
+    }
+
+    /* Set the icon directly: a url() passed through --read-status-icon would resolve
+     * against Thunderbird's stylesheet and not find the theme file. */
+    & .card-layout[data-properties~="unread"] .read-status {
+      content: url("icons/dot.svg") !important;
+      -moz-context-properties: fill !important;
+      fill: var(--mx-accent-icon) !important;
     }
 
     /* Thread count as grey capsule */
@@ -160,9 +166,8 @@
       }
     }
 
-    &:focus-within .card-layout.selected[data-properties~="unread"] {
-      --read-status-fill: var(--mx-on-accent) !important;
-      --read-status-stroke: var(--mx-on-accent) !important;
+    &:focus-within .card-layout.selected[data-properties~="unread"] .read-status {
+      fill: var(--mx-on-accent) !important;
     }
 
     /* Keyboard "current" row (Ctrl+arrows) stays visible */

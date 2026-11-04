@@ -64,10 +64,19 @@ test('accent used for icons and text goes through contrast-safe tokens', () => {
   }
 });
 
-test('unread cards use the theme dot at --mx-unread-dot size', () => {
+test('unread cards set the theme dot directly on .read-status at --mx-unread-dot size', () => {
   const css = read('threadpane.css');
-  assert.match(css, /--read-status-icon:\s*url\("icons\/dot\.svg"\)/);
+  assert.match(css, /\[data-properties~="unread"\] \.read-status\s*\{[^}]*content:\s*url\("icons\/dot\.svg"\) !important/);
   assert.match(css, /--read-status-size:\s*var\(--mx-unread-dot\)/);
+});
+
+// A relative url() inside a custom property resolves where var() is used (Thunderbird's own
+// stylesheet under chrome://messenger/skin/), so the theme icon is not found there.
+test('no relative url() inside custom properties', () => {
+  for (const f of readdirSync(dir).filter(f => f.endsWith('.css'))) {
+    const hits = [...read(f).matchAll(/(--[a-z0-9-]+)\s*:[^;{}]*url\("(?![a-z]+:)[^"]*"\)/g)].map(m => m[0]);
+    assert.deepEqual(hits, [], f);
+  }
 });
 
 // TB 159 infobar.css paints warnings light-dark(#fff160, #ffe900) with black text – glaring in dark mode.
