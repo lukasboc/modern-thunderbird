@@ -24,19 +24,20 @@ Zwei Teile:
 5. Einstellungen › Darstellung › Akzentfarbe auf „System“ lassen (setzt `user.js` bereits).
 6. Toolbar anpassen (Rechtsklick auf die Toolbar › Anpassen): Antworten, Allen antworten, Weiterleiten, Löschen hinzufügen. Die Buttons im Nachrichtenkopf bleiben als Icons erhalten, damit Nachrichten in eigenen Tabs und Fenstern bedienbar bleiben.
 
-7. Optional, Schnell-Löschen in der Nachrichtenliste:
+7. Optional, Schnell-Löschen und Textvorschau in der Nachrichtenliste:
    ```bash
    scripts/build-addon.sh
    ```
-   Dann `dist/modern-thunderbird-actions.xpi` genauso wie das Theme installieren. Beim Überfahren einer Karte erscheint neben dem Stern ein Papierkorb; ein Klick löscht diese Mail (bei zugeklapptem Thread den ganzen Thread) nach den Papierkorb-Regeln des Kontos, ohne die Auswahl zu ändern. Rückgängig wie gewohnt.
+   Dann `dist/modern-thunderbird-actions.xpi` genauso wie das Theme installieren. Beim Überfahren einer Karte erscheint neben dem Stern ein Papierkorb; ein Klick löscht diese Mail (bei zugeklapptem Thread den ganzen Thread) nach den Papierkorb-Regeln des Kontos, ohne die Auswahl zu ändern. Rückgängig wie gewohnt. Die dritte Kartenzeile zeigt außerdem die ersten Worte der Mail (graue Vorschauzeile).
 
-### Schnell-Löschen (`addon/`)
+### Schnell-Löschen und Textvorschau (`addon/`)
 
-Ein kleines Add-on mit **Experiment-API**, also privilegiertem JavaScript. Das geht über die ursprüngliche Spec hinaus, die keine neuen Funktionen vorsah; die Spec nennt es als optionale Stufe.
+Ein kleines Add-on mit **Experiment-APIs**, also privilegiertem JavaScript. Das geht über die ursprüngliche Spec hinaus, die keine neuen Funktionen vorsah; die Spec nennt es als optionale Stufe.
 
 - `experiments/cardDelete/implementation.js` fügt den Knopf in Thunderbirds Kartenvorlage (`#threadPaneCardTemplate`) ein und meldet Klicks; gelöscht wird in `background.js` über die stabile API `messages.delete`.
-- Die Optik kommt aus `chrome/threadpane.css` (`.mx-card-delete`); ohne die Stylesheets erscheint ein ungestylter Knopf.
-- Nach jedem Thunderbird-Major-Update mitprüfen (Checkliste D-01 bis D-05). Deinstallation über Add-ons und Themes.
+- `experiments/cardPreview/implementation.js` fügt der Kartenvorlage eine Vorschauzeile (`.mx-card-preview`) hinzu und füllt sie bei jedem Neuzeichnen der Karte (`fillRow`). Der Text ist Thunderbirds eigene Vorschau (`preview`-Eigenschaft der Nachricht, max. ~200 Zeichen ohne HTML). Fehlt sie, wird sie einmal per `fetchMsgPreviewText` angefordert: lokal und offline sofort, bei IMAP ohne Offline-Kopie lädt Thunderbird den Anfang der Nachricht vom Server (nur für sichtbare Karten). Die Zeile nutzt den Platz, den Thunderbird bei `rowcount` 3 ohnehin reserviert; die Kartenhöhe bleibt gleich. Verschlüsselte Mails haben keine Vorschau.
+- Die Optik kommt aus `chrome/threadpane.css` (`.mx-card-delete`, `.mx-card-preview`); ohne die Stylesheets erscheinen Knopf und Vorschau ungestylt.
+- Nach jedem Thunderbird-Major-Update mitprüfen (Checkliste D-01 bis D-05, P-01 bis P-07). Deinstallation über Add-ons und Themes.
 
 ### Gesetzte Prefs (`prefs/user.js`)
 
@@ -68,7 +69,7 @@ Notfall ohne Skript: `chrome/` im Profil umbenennen.
 
 ## Bekannte Grenzen
 
-- **Keine Textvorschau in Karten.** Thunderbird 159 liefert in der Kartenansicht keinen Vorschautext; zwei Vorschauzeilen wären nur mit einem Experiment-Add-on (JS) möglich.
+- **Textvorschau nur mit Add-on.** Thunderbird 159 zeigt in der Kartenansicht keinen Vorschautext; die einzeilige Vorschau kommt aus dem optionalen Add-on (`addon/`). Zwei Vorschauzeilen gehen nicht, weil Thunderbird die Kartenhöhe auf 3 Zeilen begrenzt.
 - **Ordnername nicht in der Fensterleiste.** Er steht im Kopf der Nachrichtenliste; CSS kann keinen Text zwischen Dokumenten verschieben.
 - **Keine echte Vibrancy.** Die Ordnerleiste ist deckend (`#F6F6F6` / `#282828`); macOS-Transparenz ist aus User-Stylesheets nicht verlässlich erreichbar.
 - **Kartenabstände.** Die Kartenhöhe berechnet Thunderbird selbst; vertikale Innenabstände folgen der Dichte-Einstellung, nicht exakt den 10 px der Spec.

@@ -1,0 +1,6 @@
+[
+  {
+    "namespace": "cardPreview",
+    "description": "First words of the message body as a line on message-list cards. UI only, no functions."
+  }
+]

@@ -106,6 +106,18 @@ Ergebnis: ✅ erfüllt · ❌ Fehler (Issue) · ⚠️ Grenze (siehe README).
 | D-04 | Ausgewählte Karte | Papierkorb weiß | | |
 | D-05 | Add-on deaktivieren | Knopf verschwindet ohne Neustart, Liste funktioniert normal | | |
 
+## Textvorschau (P, Add-on)
+
+| ID | Prüfschritt | Erwartet | L | D |
+|---|---|---|---|---|
+| P-01 | Add-on installieren, Posteingang öffnen | dritte Kartenzeile zeigt die ersten Worte der Mail in Grau, einzeilig mit „…“; Kartenhöhe unverändert; Betreff und Vorschau beginnen bündig mit dem Absender | | |
+| P-02 | IMAP-Ordner ohne Offline-Kopie öffnen | Vorschau erscheint nach kurzer Verzögerung; Scrollen bleibt flüssig | | |
+| P-03 | Thread mit Antworten | Vorschau rechts neben dem Antworten-Zähler, Icons rechts unverändert | | |
+| P-04 | Ausgewählte Karte (Liste fokussiert / Fenster inaktiv) | Vorschau weiß bzw. in Textfarbe | | |
+| P-05 | Verschlüsselte Mail, Gruppierung nach Sortierung | keine Vorschau, keine Fehler in der Fehlerkonsole | | |
+| P-06 | `mail.threadpane.cardsview.rowcount` = 2 | keine Vorschau, Karten wie ohne Add-on | | |
+| P-07 | Add-on deaktivieren | Vorschau verschwindet ohne Neustart | | |
+
 ## Abnahme (A) – Akzeptanzkriterien der Spec
 
 | ID | Kriterium | L | D |

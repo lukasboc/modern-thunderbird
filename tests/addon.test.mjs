@@ -142,7 +142,8 @@ test('build-addon.sh packs manifest and experiment at the xpi root', () => {
   const b = spawnSync('bash', [join(repo, 'scripts/build-addon.sh')], { encoding: 'utf8' });
   assert.equal(b.status, 0, b.stderr);
   const l = spawnSync('unzip', ['-l', join(repo, 'dist/modern-thunderbird-actions.xpi')], { encoding: 'utf8' }).stdout;
-  for (const f of ['manifest.json', 'background.js', 'experiments/cardDelete/schema.json', 'experiments/cardDelete/implementation.js']) {
+  for (const f of ['manifest.json', 'background.js', 'experiments/cardDelete/schema.json', 'experiments/cardDelete/implementation.js',
+    'experiments/cardPreview/schema.json', 'experiments/cardPreview/implementation.js']) {
     assert.match(l, new RegExp(`\\s${f.replace(/[./]/g, '\\$&')}\\n`), f);
   }
 });
@@ -166,4 +167,144 @@ test('listener registered before onStartup still receives deleted ids', () => {
   api.onStartup();
   api.report([{ n: 4 }, { n: 9 }]);
   assert.deepEqual(got, [[4, 9]]);
+});
+
+// --- cardPreview: first words of the body as third card line ---
+const previewScript = () => readFileSync(addon(manifest.experiment_apis.cardPreview.parent.script), 'utf8');
+
+function loadPreview(services = {}) {
+  const sandbox = {
+    ChromeUtils: { importESModule: () => ({ ExtensionCommon: { ExtensionAPI: class {} } }) },
+    Services: services,
+    console,
+  };
+  vm.runInNewContext(previewScript() + '\nthis.API = cardPreview;', sandbox);
+  return sandbox;
+}
+
+test('manifest: cardPreview experiment loads at startup', () => {
+  const api = manifest.experiment_apis.cardPreview;
+  assert.ok(existsSync(addon(api.schema)));
+  assert.ok(existsSync(addon(api.parent.script)));
+  assert.deepEqual(api.parent.scopes, ['addon_parent']);
+  assert.deepEqual(api.parent.paths, [['cardPreview']]);
+  assert.deepEqual(api.parent.events, ['startup']);
+  const [ns] = JSON.parse(readFileSync(addon(api.schema), 'utf8'));
+  assert.equal(ns.namespace, 'cardPreview');
+});
+
+test('cleanPreview collapses whitespace, trims and caps the length', () => {
+  const impl = loadPreview();
+  assert.equal(impl.cleanPreview('  Hallo\n\nTeam,\tbitte  prüfen '), 'Hallo Team, bitte prüfen');
+  assert.equal(impl.cleanPreview(undefined), '');
+  assert.equal(impl.cleanPreview('x'.repeat(500)).length, 160);
+});
+
+test('addPreview appends one preview span, idempotent', () => {
+  const impl = loadPreview();
+  const children = [];
+  const row = {
+    querySelector: sel => children.find(c => `.${c.className}` === sel) ?? null,
+    appendChild: c => children.push(c),
+  };
+  const doc = { createElement: () => ({}) };
+  assert.equal(impl.addPreview(row, doc), true);
+  assert.equal(children[0].className, 'mx-card-preview');
+  assert.equal(impl.addPreview(row, doc), false);
+  assert.equal(children.length, 1);
+  assert.equal(impl.addPreview(null, doc), false);
+});
+
+test('headerForCard: header of the row, null for dummy rows and errors', () => {
+  const impl = loadPreview();
+  const view = { getMsgHdrAt: i => { if (i > 5) throw new Error('out of range'); return `h${i}`; } };
+  assert.equal(impl.headerForCard({ view, index: 2, dataset: { properties: 'unread' } }), 'h2');
+  assert.equal(impl.headerForCard({ view, index: 2, dataset: { properties: 'dummy' } }), null);
+  assert.equal(impl.headerForCard({ view, index: 9, dataset: {} }), null);
+  assert.equal(impl.headerForCard({ view, index: -1, dataset: {} }), null);
+  assert.equal(impl.headerForCard({ index: 1, dataset: {} }), null);
+});
+
+// Fake about:3pane with one card class, a template and on-screen cards.
+function fake3pane(headers) {
+  const span = () => ({ className: 'mx-card-preview', textContent: '', remove() { this.removed = true; } });
+  const makeRow = () => {
+    const kids = [];
+    return { kids, querySelector: s => kids.find(k => `.${k.className}` === s) ?? null, appendChild: k => kids.push(k) };
+  };
+  const templateRow = makeRow();
+  class Card {
+    constructor(index) { this.index = index; this.dataset = { properties: '' }; this.row = makeRow(); this.fills = 0; }
+    get view() { return { getMsgHdrAt: i => headers[i] }; }
+    fillRow() { this.fills++; return 'orig'; }
+    querySelector(s) { return s === '.thread-card-dynamic-row' ? this.row : this.row.querySelector(s); }
+  }
+  const cards = [new Card(0), new Card(1)];
+  let raf;
+  const win = {
+    customElements: { get: n => (n === 'thread-card' ? Card : undefined) },
+    requestAnimationFrame: fn => { raf = fn; return 1; },
+    cancelAnimationFrame: () => { raf = null; },
+    addEventListener() {},
+  };
+  const doc = {
+    URL: 'about:3pane',
+    defaultView: win,
+    createElement: span,
+    getElementById: id => ({
+      threadPaneCardTemplate: { content: { querySelector: () => templateRow, querySelectorAll: () => templateRow.kids } },
+      threadTree: {
+        querySelectorAll: s => (s === '.card-layout' ? cards
+          : s === '.card-layout .thread-card-dynamic-row' ? cards.map(c => c.row)
+          : cards.flatMap(c => c.row.kids)),
+      },
+    })[id],
+  };
+  return { doc, Card, cards, templateRow, runFrame: () => { const f = raf; raf = null; f?.(); } };
+}
+
+test('inject shows stored previews and fetches missing ones once per folder batch', () => {
+  const fetches = [];
+  let listener;
+  const folder = {
+    URI: 'imap://x/INBOX',
+    fetchMsgPreviewText(keys, l) { fetches.push([...keys]); listener = l; return true; },
+  };
+  const stored = { '1': 'Bitte  bis\nFreitag freigeben' };
+  const hdr = key => ({ folder, messageKey: key, getStringProperty: p => (p === 'preview' ? stored[key] ?? '' : '') });
+  const headers = [hdr(1), hdr(2)];
+  const page = fake3pane(headers);
+  const api = new (loadPreview().API)();
+  api.inject(page.doc);
+
+  assert.equal(page.templateRow.kids.length, 1, 'template gets the line');
+  assert.equal(page.cards[0].row.kids[0].textContent, 'Bitte bis Freitag freigeben');
+  assert.equal(page.cards[1].row.kids[0].textContent, '');
+
+  page.runFrame();
+  assert.deepEqual(fetches, [[2]]);
+
+  // Repaints do not re-request a key already asked for.
+  page.cards[1].fillRow();
+  page.runFrame();
+  assert.equal(fetches.length, 1);
+  assert.equal(page.cards[1].fills, 1, 'original fillRow still runs');
+
+  // Async fetch done: visible cards are refreshed.
+  stored['2'] = 'Server down seit 10 Uhr';
+  listener.OnStopRunningUrl();
+  assert.equal(page.cards[1].row.kids[0].textContent, 'Server down seit 10 Uhr');
+});
+
+test('cleanup restores fillRow and removes the preview lines', () => {
+  const headers = [{ folder: null, messageKey: 1, getStringProperty: () => 'x' }];
+  const page = fake3pane(headers);
+  const original = page.Card.prototype.fillRow;
+  const api = new (loadPreview({ obs: { addObserver() {}, removeObserver() {} }, wm: { getEnumerator: () => [] } }).API)();
+  api.onStartup();
+  api.inject(page.doc);
+  assert.notEqual(page.Card.prototype.fillRow, original);
+  api.onShutdown(false);
+  assert.equal(page.Card.prototype.fillRow, original);
+  assert.ok(page.cards[0].row.kids[0].removed);
 });
