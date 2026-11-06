@@ -100,10 +100,10 @@ Ergebnis: ✅ erfüllt · ❌ Fehler (Issue) · ⚠️ Grenze (siehe README).
 
 | ID | Prüfschritt | Erwartet | L | D |
 |---|---|---|---|---|
-| D-01 | Add-on installieren, Maus über eine Karte | grauer Papierkorb neben dem Stern; ohne Hover unsichtbar | | |
+| D-01 | Add-on installieren, Liste ansehen | Papierkorb neben dem Stern auf jeder Karte, Outline in derselben Farbe wie der leere Stern | | |
 | D-02 | Papierkorb überfahren, dann klicken | rot mit grauer Fläche; Mail landet im Papierkorb, Auswahl bleibt unverändert, ⌘Z holt sie zurück | | |
 | D-03 | Zugeklappter Thread: Papierkorb klicken | ganzer Thread wird gelöscht (wie Entf) | | |
-| D-04 | Ausgewählte Karte | Papierkorb weiß | | |
+| D-04 | Ausgewählte Karte | Papierkorb hell wie der Stern, beim Überfahren weiß | | |
 | D-05 | Add-on deaktivieren | Knopf verschwindet ohne Neustart, Liste funktioniert normal | | |
 
 ## Textvorschau (P, Add-on)

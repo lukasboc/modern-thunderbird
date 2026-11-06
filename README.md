@@ -28,7 +28,7 @@ Zwei Teile:
    ```bash
    scripts/build-addon.sh
    ```
-   Dann `dist/modern-thunderbird-actions.xpi` genauso wie das Theme installieren. Beim Überfahren einer Karte erscheint neben dem Stern ein Papierkorb; ein Klick löscht diese Mail (bei zugeklapptem Thread den ganzen Thread) nach den Papierkorb-Regeln des Kontos, ohne die Auswahl zu ändern. Rückgängig wie gewohnt. Die dritte Kartenzeile zeigt außerdem die ersten Worte der Mail (graue Vorschauzeile).
+   Dann `dist/modern-thunderbird-actions.xpi` genauso wie das Theme installieren. Neben dem Stern jeder Karte steht ein Papierkorb (gleiche Outline-Farbe wie der Stern, beim Überfahren rot); ein Klick löscht diese Mail (bei zugeklapptem Thread den ganzen Thread) nach den Papierkorb-Regeln des Kontos, ohne die Auswahl zu ändern. Rückgängig wie gewohnt. Die dritte Kartenzeile zeigt außerdem die ersten Worte der Mail (graue Vorschauzeile).
 
 ### Schnell-Löschen und Textvorschau (`addon/`)
 

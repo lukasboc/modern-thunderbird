@@ -141,7 +141,8 @@
       fill: var(--mx-accent-icon) !important;
     }
 
-    /* Quick-delete button (injected by addon/): next to the star, revealed on hover */
+    /* Quick-delete button (injected by addon/): next to the star, always visible.
+     * Idle outline mirrors Thunderbird's unflagged .button-star (30 % / 70 % of the text colour). */
     & .mx-card-delete {
       inline-size: var(--mx-icon-md) !important;
       block-size: var(--mx-icon-md) !important;
@@ -152,13 +153,9 @@
       background: url("icons/delete.svg") center / var(--mx-icon-sm) no-repeat var(--mx-transparent) !important;
       -moz-context-properties: fill, stroke !important;
       fill: var(--mx-transparent) !important;
-      stroke: var(--mx-label-secondary) !important;
-      opacity: 0 !important;
-      transition: opacity var(--mx-duration) var(--mx-ease) !important;
-    }
-
-    & .card-layout:is(:hover, :focus-within) .mx-card-delete {
-      opacity: 1 !important;
+      color: inherit !important; /* .button sets its own colour; the star inherits the card's */
+      stroke: color-mix(in srgb, currentColor 30%, var(--mx-transparent)) !important;
+      transition: stroke var(--mx-duration) var(--mx-ease) !important;
     }
 
     & .mx-card-delete:hover {
@@ -220,7 +217,10 @@
     }
 
     /* Selected, list focused: accent surface, accent text colour */
-    &:focus-within .card-layout.selected > td > .card-container .mx-card-delete,
+    &:focus-within .card-layout.selected > td > .card-container .mx-card-delete {
+      stroke: color-mix(in srgb, currentColor 70%, var(--mx-transparent)) !important;
+    }
+
     &:focus-within .card-layout.selected > td > .card-container .mx-card-delete:hover {
       stroke: var(--mx-on-accent) !important;
     }

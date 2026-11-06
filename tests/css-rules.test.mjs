@@ -133,13 +133,14 @@ test('search facets: pill toggles and bars in accent, selected text readable', (
   assert.match(css, /--barColor:\s*var\(--mx-accent-icon\) !important/);
 });
 
-// Quick-delete button injected by addon/: hidden until the card is hovered, red on hover.
-test('card delete button: trash icon, revealed on hover, danger on hover, white on selection', () => {
+// Quick-delete button injected by addon/: always visible with the star's idle outline, red on hover.
+test('card delete button: trash icon, star-like outline, danger on hover, light on selection', () => {
   const css = read('threadpane.css');
-  assert.match(css, /& \.mx-card-delete\s*\{[^}]*background:[^;]*url\("icons\/delete\.svg"\)[^}]*opacity:\s*0 !important/);
-  assert.match(css, /\.card-layout:is\(:hover, :focus-within\) \.mx-card-delete\s*\{[^}]*opacity:\s*1 !important/);
+  assert.match(css, /& \.mx-card-delete\s*\{[^}]*background:[^;]*url\("icons\/delete\.svg"\)[^}]*stroke:\s*color-mix\(in srgb, currentColor 30%, var\(--mx-transparent\)\) !important/);
+  assert.doesNotMatch(css, /\.mx-card-delete[^{]*\{[^}]*opacity:\s*0/);
   assert.match(css, /\.mx-card-delete:hover\s*\{[^}]*stroke:\s*var\(--mx-danger-icon\) !important/);
-  assert.match(css, /\.card-layout\.selected > td > \.card-container \.mx-card-delete[^{]*\{[^}]*stroke:\s*var\(--mx-on-accent\) !important/);
+  assert.match(css, /\.card-layout\.selected > td > \.card-container \.mx-card-delete\s*\{[^}]*stroke:\s*color-mix\(in srgb, currentColor 70%, var\(--mx-transparent\)\) !important/);
+  assert.match(css, /\.card-layout\.selected > td > \.card-container \.mx-card-delete:hover\s*\{[^}]*stroke:\s*var\(--mx-on-accent\) !important/);
 });
 
 // TB offsets #messengerBody by --spaces-total-width computed on :root from --spaces-icon-size.
